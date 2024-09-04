@@ -17,7 +17,7 @@ export default function PriorityAndCategorySelector({ todoState, setTodoState, t
         if (type === 'create') {
             setInitialized(true);
         }
-    }, [todoState, initialized]);
+    }, [todoState, initialized, type]);
 
     const handleStateChange = (key: keyof TodoState, value: string) => {
         if (initialized) {
