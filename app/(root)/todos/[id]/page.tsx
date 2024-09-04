@@ -46,7 +46,7 @@ const formSchema = z.object({
     todoDescription: z.string().min(0).max(200),
 })
 
-const page = ({ params }: PageProps) => {
+const TodoDetail = ({ params }: PageProps) => {
     const todoData = useQuery(api.todos.getTodo, { id: params.id });
     const [todoState, setTodoState] = useState<TodoState>({
         priority: "",
@@ -233,4 +233,4 @@ const page = ({ params }: PageProps) => {
     )
 }
 
-export default page
+export default TodoDetail

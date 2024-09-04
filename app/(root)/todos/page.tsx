@@ -23,7 +23,7 @@ import Link from 'next/link';
 import TextScrolling from '@/components/TextScrolling';
 
 
-const page = () => {
+const TodoList = () => {
     const { user } = useUser();
     const todos = useQuery(api.todos.getUserTodos, { userId: user?.id! });
 
@@ -141,4 +141,4 @@ const page = () => {
     )
 }
 
-export default page
+export default TodoList
