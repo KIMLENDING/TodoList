@@ -19,23 +19,28 @@ const AttachmentFile = ({ onUploadComplete }: AttachmentFileProps) => {
     };
 
     const handleUpload = async (): Promise<UploadResult> => {
-        if (selectedFiles.length === 0) return { urls: [], storageIds: [] };
+        if (selectedFiles.length === 0) return { urls: [], storageIds: [], types: [], names: [] };
         console.log('handleUpload');
         const uploaded = await startUpload(selectedFiles);
+        console.log('uploaded', uploaded);
         const storageIds = uploaded.map(({ response }: any) => response.storageId);
+        const types = uploaded.map(({ type }: any) => type);
+        const names = uploaded.map(({ name }: any) => name);
 
         const urlsAndIds = await Promise.all(
-            storageIds.map(async (storageId) => {
+            storageIds.map(async (storageId, index) => {
                 const url: any = await getFileUrl({ storageId });
-                return { storageId, url };
+                return { storageId, url, type: types[index], name: names[index] };
             })
         );
 
         const urls = urlsAndIds.map(({ url }) => url);
         const ids = urlsAndIds.map(({ storageId }) => storageId);
+        const typ = urlsAndIds.map(({ type }) => type);
+        const nams = urlsAndIds.map(({ name }) => name);
 
 
-        return { urls, storageIds: ids };
+        return { urls, storageIds: ids, types: typ, names: nams };
     };
     useEffect(() => {
         onUploadComplete(handleUpload);

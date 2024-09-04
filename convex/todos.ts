@@ -28,6 +28,17 @@ export const getAllTodos = query({
     },
 });
 
+// _id로 특정 Todo 항목을 가져오는 쿼리
+export const getTodo = query({
+    args: {
+        id: v.id("todos"),
+    },
+    handler: async (ctx, args) => {
+        const todo = await ctx.db.get(args.id);
+        return todo;
+    }
+})
+
 // 특정 사용자의 Todo 항목을 가져오는 쿼리
 export const getUserTodos = query({
     args: { userId: v.string() },
@@ -44,15 +55,19 @@ export const getUserTodos = query({
 export const createTodo = mutation({
     args: {
         todoTitle: v.string(), // todo 제목
-        todoDescription: v.string(), // todo 내용
-        dueDate: v.number(), // 기한
-        attachmentUrls: v.optional(v.array(v.string())),
-        attachments: v.optional(v.array(v.id("_storage"))),
+        todoDescription: v.optional(v.string()), // todo 내용
+        dueDate: v.optional(v.object({ from: v.optional(v.number()), to: v.optional(v.number()) })),
+        attachments: v.optional(v.object({
+            attachmentUrls: v.optional(v.array(v.string())), // 첨부파일 URL
+            attachmentid: v.optional(v.array(v.id('_storage'))), // 첨부파일
+            attachmentTypes: v.optional(v.array(v.string())), // 첨부파일 타입
+            attachmentNames: v.optional(v.array(v.string())), // 첨부파일 이름
+        })),
         priority: v.optional(v.string()), // 우선순위
         category: v.optional(v.string()), // 카테고리
         tags: v.optional(v.array(v.string())), // 태그
         reminder: v.optional(v.number()), // 리마인더 알림설정 (시간)
-        // repeat: v.optional(v.boolean()), // 반복 설정
+        repeatType: v.optional(v.string()), //  repeatType: '매일||매주||매달||매년' // 반복 설정
         progress: v.optional(v.number()),   // 진행 상황
     },
     handler: async (ctx, args) => {
@@ -83,22 +98,27 @@ export const createTodo = mutation({
 // Todo 항목을 업데이트하는 뮤테이션
 export const updateTodo = mutation({
     args: {
-        id: v.id("todos"),
+        _id: v.id("todos"),
         todoTitle: v.optional(v.string()),
         todoDescription: v.optional(v.string()),
-        dueDate: v.optional(v.number()),
-        attachmentUrls: v.optional(v.array(v.string())),
-        attachments: v.optional(v.array(v.id("_storage"))),
+        dueDate: v.optional(v.object({ from: v.optional(v.number()), to: v.optional(v.number()) })),
+        attachments: v.optional(v.object({
+            attachmentUrls: v.optional(v.array(v.string())), // 첨부파일 URL
+            attachmentid: v.optional(v.array(v.id('_storage'))), // 첨부파일
+            attachmentTypes: v.optional(v.array(v.string())), // 첨부파일 타입
+            attachmentNames: v.optional(v.array(v.string())), // 첨부파일 이름
+        })),
         priority: v.optional(v.string()),
         category: v.optional(v.string()),
         tags: v.optional(v.array(v.string())),
         reminder: v.optional(v.number()),
-        // repeat: v.optional(v.boolean()),
+        repeatType: v.optional(v.string()), //  repeatType: '매일||매주||매달||매년' // 반복 설정
         progress: v.optional(v.number()),
+        isCompleted: v.boolean(),
     },
     handler: async (ctx, args) => {
-        const { id, ...updateFields } = args;
-        await ctx.db.patch(id, updateFields);
+        const { _id, ...updateFields } = args;
+        await ctx.db.patch(_id, updateFields);
     },
 });
 
