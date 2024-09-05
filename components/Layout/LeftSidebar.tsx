@@ -1,15 +1,25 @@
 "use client";
-import { SignedIn, SignedOut, useClerk } from '@clerk/nextjs'
-import React from 'react'
+import { SignedIn, SignedOut, useClerk, useUser } from '@clerk/nextjs'
+import React, { useEffect } from 'react'
 import { Button } from '../ui/button'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation';
 import { sidebarLinks } from '@/constants';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import { api } from '@/convex/_generated/api';
+import { useMutation } from 'convex/react';
 
 
 const LeftSidebar = () => {
+    const { isSignedIn, user } = useUser();
+    const updateTodoState = useMutation(api.todos.updateCompleted);
+    useEffect(() => {
+        if (isSignedIn && user) {
+            // 사용자가 로그인 되었을 때 실행할 코드
+            updateTodoState({ userId: user.id }); // 완료된 Todo 항목 업데이트
+        }
+    }, [isSignedIn, user]);
     const pathname = usePathname();
     const router = useRouter();
     const { signOut } = useClerk();

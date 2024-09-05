@@ -39,6 +39,36 @@ export const getTodo = query({
     }
 })
 
+// 유저 로그인시 완료된 Todo 항목을 업데이트하는 뮤테이션
+export const updateCompleted = mutation({
+    args: { userId: v.string() },
+    handler: async (ctx, args) => {
+        const todos = await ctx.db
+            .query("todos")
+            .filter((q) => q.eq(q.field("authorId"), args.userId))
+            .collect();
+        //const startTime = Date.now(); //  처리 시간 계산
+        todos.forEach(async (todo) => {
+            const { from, to } = todo.dueDate || {};
+            const isCompleted = todo.isCompleted;
+            if (!from || !to || isCompleted) return;
+            const currentTimestamp = Date.now();
+            const totalDuration = to - from;
+            // 현재 타임스탬프가 fromTimestamp부터 얼마나 진행되었는지 계산
+            const progress = currentTimestamp - from;
+            // 백분율 계산 (0% ~ 100%)
+            const percentage = Math.round((progress / totalDuration) * 1000) / 10;
+            if (percentage >= 100) {
+                // 완료 표시 업데이트 db에 패치 해줘야함
+                await ctx.db.patch(todo._id, { isCompleted: true })
+            }
+        });
+        //const endTime = Date.now(); // 처리 시간 계산
+        //const executionTime = endTime - startTime; // 처리 시간 계산
+        //console.log(`Execution time: ${executionTime}ms`); // 처리 시간 계산
+    }
+});
+
 // 특정 사용자의 Todo 항목을 가져오는 쿼리
 export const getUserTodos = query({
     args: { userId: v.string() },

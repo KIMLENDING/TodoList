@@ -93,7 +93,7 @@ export default function CreateTodo() {
     }
 
     return (
-        <section className=" w-full ">
+        <section className="mt-10 pb-10 w-full flex flex-col gap-4 ">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                     <FormField // 제목

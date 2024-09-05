@@ -16,7 +16,7 @@ import { Progress } from "@/components/ui/progress"
 import { format } from "date-fns"
 import { Badge } from "@/components/ui/badge"
 
-import React, { use, useEffect } from 'react'
+import React from 'react'
 import { Label } from '@/components/ui/label';
 
 import Link from 'next/link';
@@ -27,6 +27,7 @@ const TodoList = () => {
     const { user } = useUser();
     const todos = useQuery(api.todos.getUserTodos, { userId: user?.id! });
 
+    console.log(todos);
     const formatDateRange = (from: number, to?: number) => {
         if (isNaN(from)) {
             return '';
@@ -64,8 +65,15 @@ const TodoList = () => {
 
         // 백분율 계산 (0% ~ 100%)
         const percentage = Math.round((progress / totalDuration) * 1000) / 10;
+        if (percentage === 100) {
+            // 완료 표시 업데이트 db에 패치 해줘야함
+        }
+
         if (percentage > 100) {
             return 100;
+        }
+        if (percentage < 0) {
+            return 0;
         }
         return percentage;
     }
