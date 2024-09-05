@@ -35,6 +35,26 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
+## ToDo List (Project Title & Overview)
+
+- 배포링크 - (https://todo-list-pearl-psi.vercel.app/)
+  내가 쓰려고 만든 todo 리스트 여러 앱들이 있지만 결제해야하는 것도 있고 ui 커스텀 해서 쓸겸 만듬
+
+## 주요 기능 (Features)
+
+- todo 작성: 제목(필수),설명,기간,우선순위,카테고리,태그,파일 첨부 항목이 있음
+- todo 리스트: 작성된 to를 간략하게 카드 형식으로 보여줌
+- todo 수정: 그냥 수정기능임
+
+## 기술 스택
+
+- **프레임워크**: Next.js
+- **인증**: Clerk
+- **데이터베이스**: Convex
+- **호스팅**: Vercel
+- **언어**: TypeScript
+- **UI 라이브러리**: Shadcn UI
+
 ## env.local
 
 ```

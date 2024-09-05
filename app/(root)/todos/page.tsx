@@ -27,7 +27,6 @@ const TodoList = () => {
     const { user } = useUser();
     const todos = useQuery(api.todos.getUserTodos, { userId: user?.id! });
 
-    console.log(todos);
     const formatDateRange = (from: number, to?: number) => {
         if (isNaN(from)) {
             return '';
@@ -87,13 +86,12 @@ const TodoList = () => {
 
     if (!todos || !user) return <LoaderSpinner />;
     return (
-        <section className='w-full mt-10 flex flex-col gap-4 items-center overflow-hidden'>
+        <section className='w-full mt-10 flex flex-col gap-4 items-center overflow-y-auto no-scrollbar'>
             <div>
                 {/* 프로필,이름,제목,설명,기간,우선순위,카테고리,태그,진행상황,완료여부 */}
                 <Label className='text-[24px] font-extrabold'>TODO 목록</Label>
             </div>
-
-            <div className='h-full overflow-y-auto ' style={{ maxHeight: 'calc(100vh - 10rem)' }}>
+            <div className='h-full ' style={{ maxHeight: 'calc(100vh - 10rem)' }}>
                 <div className='w-full grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-5 auto-rows-max'>
                     {todos.sort((a, b) => b._creationTime - a._creationTime).map(todo => (
                         <div key={todo._id} >
@@ -112,7 +110,7 @@ const TodoList = () => {
                                                     </Badge>
                                                 </div>
                                             </div>
-                                            <CardDescription>{todo.todoDescription}</CardDescription>
+                                            <CardDescription className='truncate'>{todo.todoDescription}</CardDescription>
                                         </div>
                                     </CardHeader>
                                     <CardContent className='flex flex-col gap-2'>

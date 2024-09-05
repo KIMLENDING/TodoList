@@ -26,8 +26,11 @@ const LeftSidebar = () => {
     return (
         <section className='left_sidebar'>
             <nav>
-                <Link href='/' className='flex cursor-pointer items-center gap-1 pb-10 max-lg:justify-center'>
-                    <h1 className='text-[24px] font-extrabold text-white-1 max-lg:hidden'>TODO</h1>
+                <Link href='/' className='flex cursor-pointer items-center gap-3 pb-10 max-lg:justify-center'>
+                    <div className='border-2 rounded-md'>
+                        <Image src='/icons/logo.svg' alt='menu icon' width={34} height={34} />
+                    </div>
+                    <h1 className='pt-2 text-[28px] font-extrabold text-white-1 max-lg:hidden'>TODO</h1>
                 </Link>
                 {sidebarLinks.map(({ route, label, imgURL }) => {
                     const isActive = pathname === route || pathname.startsWith(`${route}/`);
