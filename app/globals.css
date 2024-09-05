@@ -78,6 +78,9 @@
   .flex-center {
     @apply flex items-center justify-center;
   }
+  .image_div {
+    @apply flex-center mt-5 h-[142px] w-full cursor-pointer flex-col gap-3 rounded-xl border-[3.2px] border-dashed border-black-6 ;
+  } 
   
 }
 .icon img {
