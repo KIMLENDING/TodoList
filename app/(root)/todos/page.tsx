@@ -21,6 +21,7 @@ import { Label } from '@/components/ui/label';
 
 import Link from 'next/link';
 import TextScrolling from '@/components/TextScrolling';
+import TodoCompletion from '@/components/TodoCompletion';
 
 
 const TodoList = () => {
@@ -95,50 +96,52 @@ const TodoList = () => {
                 <div className='w-full grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-5 auto-rows-max'>
                     {todos.sort((a, b) => b._creationTime - a._creationTime).map(todo => (
                         <div key={todo._id} >
-                            <Link href={`/todos/${todo._id}`} >
-                                <Card className=' w-full flex flex-col'>
-                                    <CardHeader>
-                                        <div className='flex flex-col'>
-                                            <div className='flex flex-row gap-4 justify-between items-center'>
+                            <Card className=' w-full flex flex-col'>
+                                <CardHeader>
+                                    <div className='flex flex-col'>
+                                        <div className='flex flex-row gap-4 justify-between items-center'>
+                                            <Link href={`/todos/${todo._id}`} >
                                                 <CardTitle className="flex-1 overflow-hidden">
                                                     {/* <div className='truncate'>{todo.todoTitle}</div> */}
                                                     <TextScrolling text={todo.todoTitle} />
                                                 </CardTitle>
-                                                <div className='flex items-center justify-center'>
-                                                    <Badge variant={todo.isCompleted ? "completed" : "secondary"}>
-                                                        {todo.isCompleted ? "Completed" : 'In Progress'}
-                                                    </Badge>
-                                                </div>
+                                            </Link>
+                                            <div className='flex items-center justify-center'>
+                                                <Badge variant={todo.isCompleted ? "completed" : "secondary"}>
+                                                    <TodoCompletion isCompleted={todo.isCompleted} />
+                                                </Badge>
                                             </div>
-                                            <CardDescription className='truncate'>{todo.todoDescription}</CardDescription>
+
                                         </div>
-                                    </CardHeader>
-                                    <CardContent className='flex flex-col gap-2'>
-                                        <div>
-                                            {todo.dueDate?.from ? (todo.dueDate.to ? (<>
-                                                기간: {formatDateRange(todo.dueDate?.from!, todo.dueDate?.to!)}
-                                            </>) : (<>
-                                                {formatDateRange(todo.dueDate?.from!)}
-                                            </>)) : (<>생성 일자: {formatDateRange(todo._creationTime)}</>)}
-                                        </div>
-                                        <div className='flex gap-2'>
-                                            {todo.category && <div className='bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm flex items-center'>
-                                                {todo.category}
-                                            </div>}
-                                            {todo.priority && <div className='bg-red-100 text-red-800 px-2 py-1 rounded-full text-sm flex items-center'>
-                                                {todo.priority}
-                                            </div>}
-                                        </div>
-                                        <div className='flex justify-between items-center gap-2'>
-                                            <Progress value={convertToPercentage(todo.isCompleted, todo.dueDate?.from, todo.dueDate?.to)} />
-                                            {convertToPercentage(todo.isCompleted, todo.dueDate?.from, todo.dueDate?.to)}%
-                                        </div>
-                                    </CardContent>
-                                    <CardFooter className='flex justify-end items-center'>
-                                        <div>{todo.attachments ? attachmentUrls(todo.attachments.attachmentUrls!) : ""}</div>
-                                    </CardFooter>
-                                </Card>
-                            </Link>
+                                        <CardDescription className='truncate'>{todo.todoDescription}</CardDescription>
+                                    </div>
+                                </CardHeader>
+                                <CardContent className='flex flex-col gap-2'>
+                                    <div>
+                                        {todo.dueDate?.from ? (todo.dueDate.to ? (<>
+                                            기간: {formatDateRange(todo.dueDate?.from!, todo.dueDate?.to!)}
+                                        </>) : (<>
+                                            {formatDateRange(todo.dueDate?.from!)}
+                                        </>)) : (<>생성 일자: {formatDateRange(todo._creationTime)}</>)}
+                                    </div>
+                                    <div className='flex gap-2'>
+                                        {todo.category && <div className='bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm flex items-center'>
+                                            {todo.category}
+                                        </div>}
+                                        {todo.priority && <div className='bg-red-100 text-red-800 px-2 py-1 rounded-full text-sm flex items-center'>
+                                            {todo.priority}
+                                        </div>}
+                                    </div>
+                                    <div className='flex justify-between items-center gap-2'>
+                                        <Progress value={convertToPercentage(todo.isCompleted, todo.dueDate?.from, todo.dueDate?.to)} />
+                                        {convertToPercentage(todo.isCompleted, todo.dueDate?.from, todo.dueDate?.to)}%
+                                    </div>
+                                </CardContent>
+                                <CardFooter className='flex justify-end items-center'>
+                                    <div>{todo.attachments ? attachmentUrls(todo.attachments.attachmentUrls!) : ""}</div>
+                                </CardFooter>
+                            </Card>
+
                         </div>
                     ))}
                 </div>

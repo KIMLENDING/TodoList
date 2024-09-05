@@ -158,7 +158,6 @@ export const toggleTodoCompletion = mutation({
     handler: async (ctx, args) => {
         const todo = await ctx.db.get(args.id);
         if (!todo) throw new Error("Todo not found");
-
         await ctx.db.patch(args.id, {
             isCompleted: !todo.isCompleted,
             completedAt: !todo.isCompleted ? Date.now() : undefined

@@ -107,7 +107,7 @@ export default function CreateTodo() {
                     </CardHeader>
                     <CardContent>
                         <Form {...form}>
-                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                                 <FormField
                                     control={form.control}
                                     name="todoTitle"
@@ -121,7 +121,6 @@ export default function CreateTodo() {
                                         </FormItem>
                                     )}
                                 />
-
                                 <FormField
                                     control={form.control}
                                     name="todoDescription"
@@ -135,28 +134,23 @@ export default function CreateTodo() {
                                         </FormItem>
                                     )}
                                 />
-
-                                <div className="space-y-4">
-                                    <FormLabel>기간</FormLabel>
+                                <div className="space-y-2">
+                                    <FormLabel className="text-16 font-bold">기간</FormLabel>
                                     <DateTimePickerWithRange date={date} setDate={setDate} />
                                 </div>
-
                                 <PriorityAndCategorySelector
                                     todoState={todoState}
                                     setTodoState={setTodoState}
                                     type="create"
                                 />
-
                                 <div className="space-y-2">
                                     <FormLabel>Tags</FormLabel>
                                     <TagInput tags={tags} setTags={setTags} />
                                 </div>
-
                                 <div className="space-y-2">
                                     <FormLabel>첨부파일</FormLabel>
                                     <AttachmentFile onUploadComplete={async (uploadFunc) => { handleUpload = uploadFunc; }} />
                                 </div>
-
                                 <Button type="submit" disabled={isLoading}>
                                     {isLoading ? (
                                         <div className=" flex-center font-medium ">

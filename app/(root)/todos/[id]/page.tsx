@@ -191,7 +191,7 @@ const TodoDetail = ({ params }: PageProps) => {
                     </CardHeader>
                     <CardContent>
                         <Form {...form} >
-                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                                 <FormField // 제목
                                     control={form.control}
                                     name="todoTitle"
