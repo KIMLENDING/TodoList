@@ -31,7 +31,7 @@ import {
 import { toast } from "@/components/ui/use-toast"
 import { DateRange } from "react-day-picker"
 import { TodoState, UploadResult } from "@/types/types";
-
+import { format } from "date-fns"
 import LoaderSpinner from '@/components/LoaderSpinner';
 import TagInput from "@/components/createTodo/TagInput";
 import AttachmentFile from "@/components/createTodo/AttachmentFile";
@@ -40,6 +40,7 @@ import PriorityAndCategorySelector from "@/components/createTodo/PriorityAndCate
 import Image from 'next/image';
 import Link from 'next/link';
 import { Label } from '@/components/ui/label';
+import { useRouter } from 'next/navigation';
 
 
 interface PageProps {
@@ -55,6 +56,7 @@ const formSchema = z.object({
 
 const TodoDetail = ({ params }: PageProps) => {
     const todoData = useQuery(api.todos.getTodo, { id: params.id });
+    const router = useRouter();
     const [todoState, setTodoState] = useState<TodoState>({
         priority: "",
         category: "",
@@ -86,7 +88,6 @@ const TodoDetail = ({ params }: PageProps) => {
                     todoDescription: todo.todoDescription,
                 });
             }
-
         }
     }, [todoData]);
 
@@ -119,10 +120,10 @@ const TodoDetail = ({ params }: PageProps) => {
                             attachmentTypes: [...(todo?.attachments?.attachmentTypes ?? []), ...types],
                             attachmentNames: [...(todo?.attachments?.attachmentNames ?? []), ...names],
                         },
-                        isCompleted: false,
+                        isCompleted: todo.isCompleted,
                     });
-
                     toast({ title: 'todo 업데이트 성공' });
+                    router.push('/todos');
                 } catch (error) {
                     console.error(error);
                     toast({ title: 'todo 업데이트 실패', variant: 'destructive' });
@@ -186,8 +187,14 @@ const TodoDetail = ({ params }: PageProps) => {
         <section className="mt-10 w-full flex flex-col gap-4 overflow-y-auto no-scrollbar">
             <div className='h-full' style={{ maxHeight: 'calc(100vh - 10rem)' }}>
                 <Card className="w-full max-w-2xl mx-auto">
-                    <CardHeader>
+                    <CardHeader className='flex flex-row justify-between'>
                         <CardTitle>TODO 수정</CardTitle>
+                        <div className='flex flex-row group'>
+                            <div className='text-16 font-bold'>작성일</div>
+                            <div className='flex pr-1'>: {format(todoData._creationTime, "y/LL/dd ")} </div>
+                            <div className='hidden group-hover:block'>- {format(todoData._creationTime, "hh:mm")}</div>
+                        </div>
+
                     </CardHeader>
                     <CardContent>
                         <Form {...form} >

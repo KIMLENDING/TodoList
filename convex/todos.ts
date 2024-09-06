@@ -60,7 +60,7 @@ export const updateCompleted = mutation({
             const percentage = Math.round((progress / totalDuration) * 1000) / 10;
             if (percentage >= 100) {
                 // 완료 표시 업데이트 db에 패치 해줘야함
-                await ctx.db.patch(todo._id, { isCompleted: true })
+                await ctx.db.patch(todo._id, { isCompleted: '완료' })
             }
         });
         //const endTime = Date.now(); // 처리 시간 계산
@@ -119,7 +119,7 @@ export const createTodo = mutation({
             author: user[0].name,
             authorId: user[0].clerkId,
             authorImageUrl: user[0].imageUrl,
-            isCompleted: false,
+            isCompleted: '진행중',
         });
         return todoId;
     },
@@ -144,23 +144,52 @@ export const updateTodo = mutation({
         reminder: v.optional(v.number()),
         repeatType: v.optional(v.string()), //  repeatType: '매일||매주||매달||매년' // 반복 설정
         progress: v.optional(v.number()),
-        isCompleted: v.boolean(),
+        isCompleted: v.string(), // 완료 여부 // 완료, 진행중, 실패
     },
     handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity(); // 사용자 정보 가져오기
+
+        if (!identity) {
+            throw new ConvexError('사용자 정보가 없습니다.');
+        }
+        const user = await ctx.db
+            .query("users")
+            .filter((q) => q.eq(q.field("email"), identity.email))
+            .collect();
+
+        if (user.length === 0) {
+            throw new ConvexError('사용자 정보가 없습니다.');
+        }
         const { _id, ...updateFields } = args;
         await ctx.db.patch(_id, updateFields);
     },
 });
 
-// Todo 항목의 완료 상태를 토글하는 뮤테이션
-export const toggleTodoCompletion = mutation({
-    args: { id: v.id("todos") },
+// Todo 항목의 완료 상태를 업데이트하는 뮤테이션
+export const updateTodoCompletion = mutation({
+    args: {
+        id: v.id("todos"),
+        isCompleted: v.string() // '완료' || '진행중' || '실패'
+    },
     handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity(); // 사용자 정보 가져오기
+
+        if (!identity) {
+            throw new ConvexError('사용자 정보가 없습니다.');
+        }
+        const user = await ctx.db
+            .query("users")
+            .filter((q) => q.eq(q.field("email"), identity.email))
+            .collect();
+
+        if (user.length === 0) {
+            throw new ConvexError('사용자 정보가 없습니다.');
+        }
         const todo = await ctx.db.get(args.id);
         if (!todo) throw new Error("Todo not found");
         await ctx.db.patch(args.id, {
-            isCompleted: !todo.isCompleted,
-            completedAt: !todo.isCompleted ? Date.now() : undefined
+            isCompleted: args.isCompleted,
+            completedAt: args.isCompleted !== '진행중' ? Date.now() : undefined
         });
     },
 });
@@ -169,6 +198,26 @@ export const toggleTodoCompletion = mutation({
 export const deleteTodo = mutation({
     args: { id: v.id("todos") },
     handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity(); // 사용자 정보 가져오기
+        if (!identity) {
+            throw new ConvexError('사용자 정보가 없습니다.');
+        }
+        const user = await ctx.db
+            .query("users")
+            .filter((q) => q.eq(q.field("email"), identity.email))
+            .collect();
+        if (user.length === 0) {
+            throw new ConvexError('사용자 정보가 없습니다.');
+        }
+        const todo = await ctx.db.get(args.id);
+        if (!todo) throw new Error("Todo not found");
+
+        // 첨부 파일 삭제
+        const attachments = todo.attachments || {};
+        const storageIds = attachments.attachmentid || [];
+        storageIds.map(async (storageId) => {
+            await deleteById(ctx, { storageId });
+        })
         await ctx.db.delete(args.id);
     },
 });

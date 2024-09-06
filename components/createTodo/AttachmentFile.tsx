@@ -59,6 +59,7 @@ const AttachmentFile = ({ onUploadComplete }: AttachmentFileProps) => {
             return { urls: [], storageIds: [], types: [], names: [] };
         } finally {
             setLoading(false);
+            setSelectedFiles([]); // 파일 선택 초기화
         }
     };
 

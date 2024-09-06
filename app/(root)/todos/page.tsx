@@ -21,8 +21,7 @@ import { Label } from '@/components/ui/label';
 
 import Link from 'next/link';
 import TextScrolling from '@/components/TextScrolling';
-import TodoCompletion from '@/components/TodoCompletion';
-
+import TodoControls from '@/components/TodoCompletion';
 
 const TodoList = () => {
     const { user } = useUser();
@@ -49,11 +48,11 @@ const TodoList = () => {
         }
         return format(from, "y/LL/dd HH:mm") + ' - ' + format(to, "y/LL/dd HH:mm");
     }
-    function convertToPercentage(isCompleted: boolean, fromTimestamp?: number, toTimestamp?: number) {
-        if (isCompleted) {
+    function convertToPercentage(isCompleted: string, fromTimestamp?: number, toTimestamp?: number) {
+        if (isCompleted === '완료') {
             return 100;
         }
-        if (!fromTimestamp || !toTimestamp) {
+        if (!fromTimestamp || !toTimestamp || isCompleted === '실패') {
             return 0;
         }
         // 전체 구간 (to - from) 계산
@@ -96,22 +95,21 @@ const TodoList = () => {
                 <div className='w-full grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-5 auto-rows-max'>
                     {todos.sort((a, b) => b._creationTime - a._creationTime).map(todo => (
                         <div key={todo._id} >
-                            <Card className=' w-full flex flex-col'>
+                            <Card className='w-full flex flex-col'>
                                 <CardHeader>
                                     <div className='flex flex-col'>
                                         <div className='flex flex-row gap-4 justify-between items-center'>
-                                            <Link href={`/todos/${todo._id}`} >
+                                            <Link href={`/todos/${todo._id}`} className="flex-1 min-w-0"> {/* min-w-0: 최소 너비 0 기본은 auto라서 자식요소의 공간을 최대한 확보하려 하기 때문에 자식요소가 커지는 것을 방지*/}
                                                 <CardTitle className="flex-1 overflow-hidden">
                                                     {/* <div className='truncate'>{todo.todoTitle}</div> */}
                                                     <TextScrolling text={todo.todoTitle} />
                                                 </CardTitle>
                                             </Link>
-                                            <div className='flex items-center justify-center'>
-                                                <Badge variant={todo.isCompleted ? "completed" : "secondary"}>
-                                                    <TodoCompletion isCompleted={todo.isCompleted} />
+                                            <div className="flex-shrink-0"> {/* 요소 크기 유지 */}
+                                                <Badge variant={todo.isCompleted !== '완료' ? (todo.isCompleted === '진행중' ? "secondary" : "destructive") : "completed"}>
+                                                    <TodoControls isCompleted={todo.isCompleted} todoId={todo._id} />
                                                 </Badge>
                                             </div>
-
                                         </div>
                                         <CardDescription className='truncate'>{todo.todoDescription}</CardDescription>
                                     </div>
@@ -141,7 +139,6 @@ const TodoList = () => {
                                     <div>{todo.attachments ? attachmentUrls(todo.attachments.attachmentUrls!) : ""}</div>
                                 </CardFooter>
                             </Card>
-
                         </div>
                     ))}
                 </div>

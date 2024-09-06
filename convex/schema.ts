@@ -27,7 +27,7 @@ export default defineSchema({
         repeatType: v.optional(v.string()), //  repeatType: '매일||매주||매달||매년' // 반복 설정
         progress: v.optional(v.number()), // 진행 상황 // 0 ~ 100 % 이건 안 씀  굳이 필요없는것 같다 (이유 - 프론트에서 날짜 데이터 받아서 계산해서 보여주면 됨)
 
-        isCompleted: v.boolean(), // 완료 여부 // true, false
+        isCompleted: v.string(), // 완료 여부 // 완료, 진행중, 실패
         completedAt: v.optional(v.number()), // 완료 시간 (시간)
     })
         .searchIndex('search_author', { searchField: 'author' }) // 검색 인덱스 author 필드

@@ -7,13 +7,13 @@ interface ScrollingTextProps {
 const TextScrolling = ({ text, speed = 40 }: ScrollingTextProps) => {
     const [position, setPosition] = useState(0);
     const [contentWidth, setContentWidth] = useState(0);
-    const containerRef = useRef<HTMLDivElement>(null);
-    const contentRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null); // 컨테이너
+    const contentRef = useRef<HTMLDivElement>(null); // 컨텐츠
 
     useEffect(() => {
         if (!containerRef.current || !contentRef.current) return;
 
-        const containerWidth = Math.min(contentRef.current.offsetWidth, 372);
+        const containerWidth = Math.min(contentRef.current.offsetWidth, 372); // 컨테이너 너비
         setContentWidth(containerWidth);
         const totalScrollWidth = contentRef.current.offsetWidth - containerWidth;
 
