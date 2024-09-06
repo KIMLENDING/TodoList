@@ -181,7 +181,6 @@ export const updateTodoCompletion = mutation({
             .query("users")
             .filter((q) => q.eq(q.field("email"), identity.email))
             .collect();
-
         if (user.length === 0) {
             throw new ConvexError('사용자 정보가 없습니다.');
         }
@@ -256,17 +255,22 @@ export const searchTodos = query({
 
 // 특정 기간 내의 Todo 항목을 가져오는 쿼리 (새로 추가)
 export const getTodosByDateRange = query({
-    args: { startDate: v.number(), endDate: v.number() },
+    args: { dueDate: v.object({ from: v.number(), to: v.number() }) },
     handler: async (ctx, args) => {
         const todos = await ctx.db
             .query("todos")
             .filter((q) =>
-                q.and(
-                    q.gte(q.field("dueDate"), args.startDate), // 시작일 이상
-                    q.lte(q.field("dueDate"), args.endDate) // 종료일 이하
-                )
+                args.dueDate?.from
+                    ? q.and(
+                        q.gte(q.field("dueDate.from"), args.dueDate.from), // from 이상
+                        args.dueDate?.to
+                            ? q.lte(q.field("dueDate.from"), args.dueDate.to) // to 이하
+                            : true // to가 없으면 무시
+                    )
+                    : true // from이 없으면 무시
             )
             .collect();
+
         return todos;
     },
 });
@@ -296,3 +300,20 @@ export const getTodosByCategory = query({
 });
 
 // 태그로 Todo 항목을 검색하는 쿼리 (새로 추가)
+
+// 사용자 아이디로 실패 완료 진행중 개수 가져오는 쿼리
+export const getTodoCount = query({
+    args: { userId: v.string() },
+    handler: async (ctx, args) => {
+        const todos = await ctx.db
+            .query("todos")
+            .filter((q) => q.eq(q.field("authorId"), args.userId))
+            .collect();
+        const completed = todos.filter((todo) => todo.isCompleted === '완료').length;
+        const inProgress = todos.filter((todo) => todo.isCompleted === '진행중').length;
+        const failed = todos.filter((todo) => todo.isCompleted === '실패').length;
+        return { completed, inProgress, failed };
+    },
+});
+
+

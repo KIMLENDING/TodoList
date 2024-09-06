@@ -31,10 +31,12 @@ const TodoControls = ({ isCompleted, todoId }: TodoControlsProps) => {
             if (changeState === '완료') {
                 // 완료 처리
                 await updateTodoCompletion({ id: todoId, isCompleted: '완료' });
-                toast({ title: '성공' });
             } else if (changeState === '실패') {
                 // 실패 처리
                 await updateTodoCompletion({ id: todoId, isCompleted: '실패' });
+            } else if (changeState === '진행중') {
+                // 진행중 처리
+                await updateTodoCompletion({ id: todoId, isCompleted: '진행중' });
             }
             toast({ title: '상태 업데이트 성공' });
         } catch (error) {
@@ -68,6 +70,7 @@ const TodoControls = ({ isCompleted, todoId }: TodoControlsProps) => {
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() => { handleComplete('완료') }} disabled={isCompleted === '완료'}>완료</DropdownMenuItem>
                     <DropdownMenuItem onClick={() => { handleComplete('실패') }} disabled={isCompleted === '실패'}>실패</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => { handleComplete('진행중') }} disabled={isCompleted === '진행중'}>진행중</DropdownMenuItem>
                     <DropdownMenuItem onClick={handleEdit}>수정</DropdownMenuItem>
                     <DropdownMenuItem onClick={handleDelete}>삭제</DropdownMenuItem>
                     <DropdownMenuItem onClick={handleShare}>공유</DropdownMenuItem>

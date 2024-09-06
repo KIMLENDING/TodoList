@@ -1,13 +1,41 @@
-import React from 'react'
+'use client';
+import LoaderSpinner from '@/components/LoaderSpinner';
+import { api } from '@/convex/_generated/api';
+import { useUser } from '@clerk/nextjs';
+import { useQuery } from 'convex/react';
+import { Progress } from "@/components/ui/progress"
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
 
-const page = () => {
+import React from 'react'
+import ProgressBarCard from '@/components/dashboard/ProgressBarCard';
+
+const Deashboard = () => {
+
+
+
+
+
     return (
-        <div>
-            진행도는 날짜로 계산 되기 때문에<br />
-            날짜가 없다면 사용자가 직접 업데이트 해야함<br />
-            from과 to가 둘다 존재 해야만 진행도가 계산됨<br />
-        </div>
+        <section className='w-full mt-10 flex flex-col gap-4 items-center overflow-y-auto no-scrollbar'>
+            <div className='h-full' style={{ maxHeight: 'calc(100vh - 10rem)' }}>
+                <div>검색어 입력란</div>
+                <div>
+                    <ProgressBarCard />
+                </div>
+                <div>특정 기간- 여긴 달력으로 값 넘겨주면 될것 같고</div>
+                <div>우선순위 필터링- 여긴 select로 값 넘겨주면 될것 같고</div>
+                <div>카테고리별 필터링- 여긴 select로 값 넘겨주면 될것 같고</div>
+                <div>태그별 필터링 - 여긴 input으로 검색 해야하고</div>
+            </div>
+        </section>
     )
 }
 
-export default page
+export default Deashboard
