@@ -142,7 +142,6 @@ export default function CreateTodo() {
                                 <PriorityAndCategorySelector
                                     todoState={todoState}
                                     setTodoState={setTodoState}
-                                    type="create"
                                 />
                                 <div className="space-y-2">
                                     <FormLabel>Tags</FormLabel>

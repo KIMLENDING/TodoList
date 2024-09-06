@@ -1,0 +1,56 @@
+문제의 원인
+useEffect와 의존성 배열
+useEffect가 실행될 때, 의존성 배열로 todoState와 initialized가 들어가 있습니다. 이로 인해 todoState와 initialized가 변경될 때마다 useEffect가 실행되며, 그 안에서 initialized를 true로 설정합니다. 하지만 initialized의 값은 렌더링 사이클마다 변하지 않고 같은 값이기 때문에 실제로는 todoState의 변화에 의해 useEffect가 반복적으로 호출되고 있습니다.
+
+Select 컴포넌트의 value가 초기 상태에 영향을 받음
+Select 컴포넌트의 value는 todoState.priority와 todoState.category에 의존합니다. 하지만 Select 컴포넌트는 선택된 값(priority나 category)가 변경되었을 때 리렌더링을 트리거하면서 onValueChange 이벤트를 발생시킬 수 있습니다.
+
+특히, priority가 이미 설정된 값('하')일 경우, 이 값이 초기화될 때 onValueChange가 트리거되어 todoState를 빈 값('')으로 다시 업데이트하는 상황이 발생할 수 있습니다.
+
+렌더링 과정
+초기 렌더링
+첫 렌더링에서는 todoState가 {priority: '', category: ''}인 상태로 시작합니다. 이때 initialized는 false이고, 로그에 첫 번째와 두 번째 출력이 발생합니다:
+
+bash
+코드 복사
+false {priority: '', category: ''}
+false {priority: '', category: ''}
+상태 업데이트 후 재렌더링
+initialized가 true로 변경되고, 부모에서 전달된 todoState 값이 {priority: '하', category: '학습'}로 업데이트됩니다. 이로 인해 컴포넌트가 다시 렌더링되면서 Select 컴포넌트의 value가 '하'와 '학습'으로 설정됩니다. 여기서 로그가 세 번째로 출력됩니다:
+
+arduino
+코드 복사
+true {priority: '하', category: '학습'}
+이벤트 트리거 문제
+Select의 value 속성에 todoState.priority와 todoState.category가 전달되면서 onValueChange가 발생할 수 있는 상황이 생깁니다. 이때 handleStateChange가 호출되어 빈 값('')을 설정하는 문제가 발생합니다. 왜냐하면 todoState가 변경된 후 내부적으로 트리거된 onValueChange에서 이전 값이 아직 반영되지 않은 상태에서 새 값으로 업데이트되기 때문입니다. 이로 인해 로그의 마지막 부분에서 값이 다시 빈 문자열('')로 바뀌게 됩니다:
+
+bash
+코드 복사
+true {priority: '', category: ''}
+해결 방법
+이 문제는 초기 렌더링 시 Select 컴포넌트에서 이벤트 트리거가 발생하는 것을 방지해야 합니다. 이를 위해 다음과 같은 방식을 사용할 수 있습니다.
+
+useEffect 의존성 수정
+todoState의 변경에 대해 useEffect가 계속 호출되면서 불필요한 렌더링이 발생하지 않도록 initialized 설정을 한 번만 하도록 변경합니다.
+
+onValueChange 호출 방지
+초기 값이 이미 설정된 상태에서는 onValueChange가 호출되지 않도록 조건을 추가하거나, 컴포넌트가 값 변경에 민감하게 반응하지 않도록 할 수 있습니다.
+
+수정된 코드 예시
+tsx
+코드 복사
+useEffect(() => {
+    if (!initialized) {
+        setInitialized(true);
+    }
+}, [initialized]); // initialized가 처음에만 설정되도록
+
+const handleStateChange = (key: keyof TodoState, value: string) => {
+    if (initialized) {  // 초기화 완료 후에만 상태를 변경
+        setTodoState((prevState: TodoState) => ({
+            ...prevState,
+            [key]: value
+        }));
+    }
+};
+이렇게 수정하면, initialized가 설정된 후에만 handleStateChange가 호출되어 상태가 변경되며, 초기화 전의 불필요한 값 변경을 방지할 수 있습니다.

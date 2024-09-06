@@ -15,7 +15,6 @@ export interface TodoState {
 export interface PriorityAndCategorySelectorProps {
     todoState: TodoState;
     setTodoState: React.Dispatch<React.SetStateAction<TodoState>>;
-    type: 'create' | 'update';
 }
 export interface AttachmentFileProps {
     onUploadComplete: (uploadFunc: () => Promise<UploadResult>) => Promise<void>;

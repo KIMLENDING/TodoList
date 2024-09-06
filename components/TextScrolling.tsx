@@ -34,12 +34,12 @@ const TextScrolling = ({ text, speed = 40 }: ScrollingTextProps) => {
     return (
         <div
             ref={containerRef}
-            className="overflow-hidden bg-gray-100 rounded inline-block"
-            style={{ width: `${contentWidth}px` }}
+            className="overflow-hidden w-full rounded inline-block"
+        // style={{ width: `${contentWidth}px` }}
         >
             <div
                 ref={contentRef}
-                className="whitespace-nowrap inline-block py-2 px-3"
+                className="whitespace-nowrap inline-block py-2 "
                 style={{ transform: `translateX(${position}px)` }}
             >
 

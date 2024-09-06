@@ -230,7 +230,7 @@ const TodoDetail = ({ params }: PageProps) => {
                                     <DateTimePickerWithRange date={date} setDate={setDate} />
                                 </div>
                                 {/* 우선순위, 카테고리 */}
-                                <PriorityAndCategorySelector todoState={todoState} setTodoState={setTodoState} type='update' />
+                                <PriorityAndCategorySelector todoState={todoState} setTodoState={setTodoState} />
                                 <div className="space-y-2">
                                     <FormLabel className="text-16 font-bold">Tags</FormLabel>
                                     <TagInput tags={tags} setTags={setTags} />
