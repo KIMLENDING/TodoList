@@ -10,12 +10,7 @@ interface ProgressBarProps {
     max: number;
     color: string;
 }
-interface ProgressBarCardProps {
-    label: string;
-    value: number;
-    total: number;
-}
-const ProgressBar = ({ label, value, max, color }: ProgressBarProps) => (
+const ProgressBar = ({ label, value = 0, max = 0, color }: ProgressBarProps) => (
     <div className="mb-4">
         <div className="flex justify-between items-center mb-1">
             <span className="text-sm font-medium text-gray-700">{label}</span>
@@ -32,11 +27,22 @@ const ProgressBar = ({ label, value, max, color }: ProgressBarProps) => (
 
 const ProgressBarCard = () => {
     const { user } = useUser();
-    const getTodoCount = useQuery(api.todos.getTodoCount, { userId: user?.id! });
-    const completed = getTodoCount?.completed || 0;
-    const inProgress = getTodoCount?.inProgress || 0;
-    const failed = getTodoCount?.failed || 0;
-    const total = completed + inProgress + failed || 1;
+    const patchTodo = () => {
+        if (user === null) {
+            return null;
+        }
+        const getTodoCount = useQuery(api.todos.getTodoCount, { userId: user?.id! });
+        const completed = getTodoCount?.completed || 0;
+        const inProgress = getTodoCount?.inProgress || 0;
+        const failed = getTodoCount?.failed || 0;
+        const total = completed + inProgress + failed || 0;
+        return { completed, inProgress, failed, total }
+    }
+    const getTodoCount = patchTodo() || { completed: 0, inProgress: 0, failed: 0, total: 0 };
+    if (user === null) {
+        return null;
+    }
+    console.log(getTodoCount.total)
 
     return (
         <div>
@@ -47,9 +53,9 @@ const ProgressBarCard = () => {
                 </CardHeader>
                 <CardContent>
                     {user ? (
-                        <> <ProgressBar label="완료" value={completed} max={total} color="bg-green-600" />
-                            <ProgressBar label="진행중" value={inProgress} max={total} color="bg-blue-600" />
-                            <ProgressBar label="실패" value={failed} max={total} color="bg-red-600" /></>
+                        <> <ProgressBar label="완료" value={getTodoCount.completed} max={getTodoCount.total} color="bg-green-600" />
+                            <ProgressBar label="진행중" value={getTodoCount.inProgress} max={getTodoCount.total} color="bg-blue-600" />
+                            <ProgressBar label="실패" value={getTodoCount.failed} max={getTodoCount.total} color="bg-red-600" /></>
                     ) : (<><LoaderSpinner /></>)}
 
                 </CardContent>

@@ -47,25 +47,27 @@ export const updateCompleted = mutation({
             .query("todos")
             .filter((q) => q.eq(q.field("authorId"), args.userId))
             .collect();
-        //const startTime = Date.now(); //  처리 시간 계산
+        const startTime = Date.now(); //  처리 시간 계산
         todos.forEach(async (todo) => {
             const { from, to } = todo.dueDate || {};
             const isCompleted = todo.isCompleted;
-            if (!from || !to || isCompleted) return;
-            const currentTimestamp = Date.now();
-            const totalDuration = to - from;
-            // 현재 타임스탬프가 fromTimestamp부터 얼마나 진행되었는지 계산
-            const progress = currentTimestamp - from;
-            // 백분율 계산 (0% ~ 100%)
-            const percentage = Math.round((progress / totalDuration) * 1000) / 10;
-            if (percentage >= 100) {
-                // 완료 표시 업데이트 db에 패치 해줘야함
-                await ctx.db.patch(todo._id, { isCompleted: '완료' })
-            }
+            if (!from || !to) return;
+            if (isCompleted === '진행중') {
+                const currentTimestamp = Date.now();
+                const totalDuration = to - from;
+                // 현재 타임스탬프가 fromTimestamp부터 얼마나 진행되었는지 계산
+                const progress = currentTimestamp - from;
+                // 백분율 계산 (0% ~ 100%)
+                const percentage = Math.round((progress / totalDuration) * 1000) / 10;
+                if (percentage >= 100) {
+                    // 완료 표시 업데이트 db에 패치 해줘야함
+                    await ctx.db.patch(todo._id, { isCompleted: '완료' })
+                }
+            } else return;
         });
-        //const endTime = Date.now(); // 처리 시간 계산
-        //const executionTime = endTime - startTime; // 처리 시간 계산
-        //console.log(`Execution time: ${executionTime}ms`); // 처리 시간 계산
+        const endTime = Date.now(); // 처리 시간 계산
+        const executionTime = endTime - startTime; // 처리 시간 계산
+        console.log(`Execution time: ${executionTime}ms`); // 처리 시간 계산
     }
 });
 
@@ -185,6 +187,7 @@ export const updateTodoCompletion = mutation({
             throw new ConvexError('사용자 정보가 없습니다.');
         }
         const todo = await ctx.db.get(args.id);
+
         if (!todo) throw new Error("Todo not found");
         await ctx.db.patch(args.id, {
             isCompleted: args.isCompleted,
@@ -226,30 +229,45 @@ export const searchTodos = query({
     args: { search: v.string(), },
     handler: async (ctx, args) => {
         const search = args.search.toLowerCase();
+        const identity = await ctx.auth.getUserIdentity(); // 사용자 정보 가져오기
+        if (!identity) {
+            throw new ConvexError('사용자 정보가 없습니다.');
+        }
+        const user = await ctx.db
+            .query("users")
+            .filter((q) => q.eq(q.field("email"), identity.email))
+            .collect();
+
+        if (user.length === 0) {
+            throw new ConvexError('사용자 정보가 없습니다.');
+        }
 
         if (search === "") {
-            return await ctx.db.query("todos").order("desc").collect();
+            const todos = await ctx.db
+                .query("todos")
+                .filter((q) => q.eq(q.field("authorId"), user[0].clerkId))
+                .order("desc")
+                .collect();
+            return todos;
         }
-        // search_author로 검색
-        const authorSearch = await ctx.db
-            .query("todos")
-            .withSearchIndex("search_author", (q) => q.search('author', args.search))
-            .collect();
-        if (authorSearch.length > 0) {
-            return authorSearch;
-        }
+
         // search_title 로 검색
         const titleSearch = await ctx.db
             .query("todos")
             .withSearchIndex("search_title", (q) => q.search('todoTitle', args.search))
+            .filter((q) => q.eq(q.field("authorId"), user[0].clerkId))
             .collect();
 
         if (titleSearch.length > 0) {
             return titleSearch;
         }
         // search_Description 로 검색
-
-        return await ctx.db.query("todos").withSearchIndex("search_Description", (q) => q.search('todoDescription', args.search)).collect();
+        const search_Description = await ctx.db
+            .query("todos")
+            .withSearchIndex("search_Description", (q) => q.search('todoDescription', args.search))
+            .filter((q) => q.eq(q.field("authorId"), user[0].clerkId))
+            .collect();
+        return search_Description
     },
 });
 

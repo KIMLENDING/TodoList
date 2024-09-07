@@ -70,7 +70,7 @@ const TodoControls = ({ isCompleted, todoId }: TodoControlsProps) => {
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() => { handleComplete('완료') }} disabled={isCompleted === '완료'}>완료</DropdownMenuItem>
                     <DropdownMenuItem onClick={() => { handleComplete('실패') }} disabled={isCompleted === '실패'}>실패</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => { handleComplete('진행중') }} disabled={isCompleted === '진행중'}>진행중</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => { handleComplete('진행중') }} disabled={isCompleted === '진행중' || isCompleted === '완료'}>진행중</DropdownMenuItem>
                     <DropdownMenuItem onClick={handleEdit}>수정</DropdownMenuItem>
                     <DropdownMenuItem onClick={handleDelete}>삭제</DropdownMenuItem>
                     <DropdownMenuItem onClick={handleShare}>공유</DropdownMenuItem>
