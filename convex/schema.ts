@@ -30,9 +30,10 @@ export default defineSchema({
         isCompleted: v.string(), // 완료 여부 // 완료, 진행중, 실패
         completedAt: v.optional(v.number()), // 완료 시간 (시간)
     })
-
         .searchIndex('search_title', { searchField: 'todoTitle' }) // 검색 인덱스 todoTitle 필드
         .searchIndex('search_Description', { searchField: 'todoDescription' }) // 검색 인덱스 todoDescription 필드
+        .searchIndex('search_Completed', { searchField: 'isCompleted' }) // 검색 인덱스 isCompleted 필드
+
     ,
     users: defineTable({
         name: v.string(),

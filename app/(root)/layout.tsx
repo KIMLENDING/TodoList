@@ -29,7 +29,7 @@ export default function RootLayout({
                             </div>
                             <MobileNav />
                         </div>
-                        <div className="w-full flex flex-col md:pb-14 " > {/**여긴 items-center 하니까 하위 컴포넌트가 가운데로 가면서 화면을 다 채우지 못해서 지움 */}
+                        <div className="w-full h-full flex flex-col md:pb-14 " > {/**여긴 items-center 하니까 하위 컴포넌트가 가운데로 가면서 화면을 다 채우지 못해서 지움 */}
                             <Toaster />
                             {children}
                         </div>

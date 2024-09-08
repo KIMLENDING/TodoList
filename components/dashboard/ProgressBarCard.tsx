@@ -27,35 +27,25 @@ const ProgressBar = ({ label, value = 0, max = 0, color }: ProgressBarProps) => 
 
 const ProgressBarCard = () => {
     const { user } = useUser();
-    const patchTodo = () => {
-        if (user === null) {
-            return null;
-        }
-        const getTodoCount = useQuery(api.todos.getTodoCount, { userId: user?.id! });
-        if (getTodoCount === undefined) {
-            return null;
-        }
-        const completed = getTodoCount?.completed || 0;
-        const inProgress = getTodoCount?.inProgress || 0;
-        const failed = getTodoCount?.failed || 0;
-        const total = completed + inProgress + failed || 0;
-        return { completed, inProgress, failed, total }
-    }
-    const getTodoCount = patchTodo();
+    const getTodoCount = useQuery(api.todos.getTodoCount, { userId: user?.id } || {});
+
+    const { completed = 0, inProgress = 0, failed = 0 } = getTodoCount || {};
+    const total = completed + inProgress + failed;
 
     return (
-        <div>
+        <div className='h-min'>
             <Card>
                 <CardHeader>
                     <CardTitle>상황판</CardTitle>
                     <CardDescription></CardDescription>
                 </CardHeader>
                 <CardContent>
-                    {getTodoCount ? (
-                        <> <ProgressBar label="완료" value={getTodoCount.completed} max={getTodoCount.total} color="bg-green-600" />
-                            <ProgressBar label="진행중" value={getTodoCount.inProgress} max={getTodoCount.total} color="bg-blue-600" />
-                            <ProgressBar label="실패" value={getTodoCount.failed} max={getTodoCount.total} color="bg-red-600" /></>
-                    ) : (<LoaderSpinner />)}
+                    {!user ? (<>로그인 해주세요</>) : (<>
+                        {getTodoCount ? (
+                            <> <ProgressBar label="완료" value={completed} max={total} color="bg-green-600" />
+                                <ProgressBar label="진행중" value={inProgress} max={total} color="bg-blue-600" />
+                                <ProgressBar label="실패" value={failed} max={total} color="bg-red-600" /></>
+                        ) : (<LoaderSpinner />)}</>)}
                 </CardContent>
                 <CardFooter>
                 </CardFooter>

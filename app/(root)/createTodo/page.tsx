@@ -102,13 +102,13 @@ export default function CreateTodo() {
     return (
         <section className="mt-10 pb-10 w-full flex flex-col gap-4 overflow-y-auto no-scrollbar">
             <div className='h-full' style={{ maxHeight: 'calc(100vh - 10rem)' }}>
-                <Card className="w-full max-w-2xl mx-auto">
+                <Card className="w-full">
                     <CardHeader>
                         <CardTitle>TODO 작성</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <Form {...form}>
-                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
                                 <FormField
                                     control={form.control}
                                     name="todoTitle"
@@ -135,7 +135,7 @@ export default function CreateTodo() {
                                         </FormItem>
                                     )}
                                 />
-                                <div className="space-y-2">
+                                <div className="space-y-4">
                                     <FormLabel className="text-16 font-bold">기간</FormLabel>
                                     <DateTimePickerWithRange date={date} setDate={setDate} />
                                 </div>
@@ -143,21 +143,23 @@ export default function CreateTodo() {
                                     todoState={todoState}
                                     setTodoState={setTodoState}
                                 />
-                                <div className="space-y-2">
+                                <div className="space-y-4">
                                     <FormLabel>Tags</FormLabel>
                                     <TagInput tags={tags} setTags={setTags} />
                                 </div>
-                                <div className="space-y-2">
+                                <div className="space-y-4">
                                     <FormLabel>첨부파일</FormLabel>
                                     <AttachmentFile onUploadComplete={async (uploadFunc) => { handleUpload = uploadFunc; }} />
                                 </div>
-                                <Button type="submit" disabled={isLoading}>
-                                    {isLoading ? (
-                                        <div className=" flex-center font-medium ">
-                                            Creating...
-                                            <Loader size={20} className="animate-spin ml-2" />
-                                        </div>) : 'Create Todo'}
-                                </Button>
+                                <div className="flex w-full justify-end">
+                                    <Button type="submit" disabled={isLoading}>
+                                        {isLoading ? (
+                                            <div className=" flex-center font-medium ">
+                                                Creating...
+                                                <Loader size={20} className="animate-spin ml-2" />
+                                            </div>) : 'Create Todo'}
+                                    </Button>
+                                </div>
                             </form>
                         </Form>
                     </CardContent>

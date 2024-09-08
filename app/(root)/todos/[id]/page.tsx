@@ -186,7 +186,7 @@ const TodoDetail = ({ params }: PageProps) => {
     return (
         <section className="mt-10 w-full flex flex-col gap-4 overflow-y-auto no-scrollbar">
             <div className='h-full' style={{ maxHeight: 'calc(100vh - 10rem)' }}>
-                <Card className="w-full max-w-2xl mx-auto">
+                <Card className="w-full "> {/* TODO 수정 max-w-2xl mx-auto*/}
                     <CardHeader className='flex flex-row justify-between'>
                         <CardTitle>TODO 수정</CardTitle>
                         <div className='flex flex-row group'>
@@ -245,13 +245,15 @@ const TodoDetail = ({ params }: PageProps) => {
                                         {todoData.attachments && handleattach(todoData.attachments)}
                                     </div>
                                 </div>
-                                <Button type="submit">
-                                    {!isLoading ? 'Update' : (
-                                        <div className=" flex-center font-medium ">
-                                            Updating...
-                                            <Loader size={20} className="animate-spin ml-2" />
-                                        </div>)}
-                                </Button>
+                                <div className="flex w-full h-full items-end justify-end">
+                                    <Button type="submit">
+                                        {!isLoading ? 'Update' : (
+                                            <div className=" flex-center font-medium ">
+                                                Updating...
+                                                <Loader size={20} className="animate-spin ml-2" />
+                                            </div>)}
+                                    </Button>
+                                </div>
                             </form>
                         </Form>
                     </CardContent>

@@ -224,6 +224,7 @@ export const deleteTodo = mutation({
     },
 });
 
+
 // Todo 항목을 검색하는 쿼리
 export const searchTodos = query({
     args: { search: v.string(), },
@@ -261,6 +262,29 @@ export const searchTodos = query({
         if (titleSearch.length > 0) {
             return titleSearch;
         }
+        // 태그로 검색
+        const tagsSearch = await ctx.db.query("todos").filter((q) => q.eq(q.field("authorId"), user[0].clerkId)).collect();
+        const tagsResult: any = [];
+        tagsSearch.filter((todo) => {
+            todo.tags?.map((tag) => {
+                if (tag.toLowerCase().includes(search.toLowerCase().trim())) {
+                    tagsResult.push(todo);
+                }
+            });
+        });
+        if (tagsResult.length > 0) {
+            return tagsResult;
+        }
+
+        // 완료||진행중||실패 로 검색
+        const completedSearch = await ctx.db
+            .query("todos")
+            .withSearchIndex("search_Completed", (q) => q.search('isCompleted', args.search))
+            .filter((q) => q.eq(q.field("authorId"), user[0].clerkId))
+            .collect();
+        if (completedSearch.length > 0) {
+            return completedSearch;
+        }
         // search_Description 로 검색
         const search_Description = await ctx.db
             .query("todos")
@@ -288,17 +312,17 @@ export const getTodosByDateRange = query({
                     : true // from이 없으면 무시
             )
             .collect();
-
         return todos;
     },
 });
 
 // 우선순위별로 Todo 항목을 가져오는 쿼리 (새로 추가)
 export const getTodosByPriority = query({
-    args: { priority: v.string() },
+    args: { priority: v.string(), userId: v.optional(v.string()) },
     handler: async (ctx, args) => {
         const todos = await ctx.db
             .query("todos")
+            .filter((q) => q.eq(q.field("authorId"), args.userId))
             .filter((q) => q.eq(q.field("priority"), args.priority))
             .collect();
         return todos;
@@ -307,13 +331,36 @@ export const getTodosByPriority = query({
 
 // 카테고리별로 Todo 항목을 가져오는 쿼리 (새로 추가)
 export const getTodosByCategory = query({
-    args: { category: v.string() },
+    args: { priority: v.optional(v.string()), category: v.optional(v.string()), userId: v.optional(v.string()) },
     handler: async (ctx, args) => {
-        const todos = await ctx.db
-            .query("todos")
-            .filter((q) => q.eq(q.field("category"), args.category))
-            .collect();
-        return todos;
+        // userId가 없으면 빈 배열 반환
+        if (!args.userId) return [];
+
+        // 기본 필터 (userId 필터링)
+        let query = ctx.db.query("todos").filter((q) => q.eq(q.field("authorId"), args.userId));
+
+        // category만 있을 경우 필터링 추가
+        if (args.category && !args.priority) {
+            query = query.filter((q) => q.eq(q.field("category"), args.category));
+        }
+
+        // priority만 있을 경우 필터링 추가
+        if (args.priority && !args.category) {
+            query = query.filter((q) => q.eq(q.field("priority"), args.priority));
+        }
+
+        // category와 priority 모두 있을 경우 필터링 추가
+        if (args.category && args.priority) {
+            query = query.filter((q) =>
+                q.and(
+                    q.eq(q.field("category"), args.category),
+                    q.eq(q.field("priority"), args.priority)
+                )
+            );
+        }
+
+        // 최종 결과 반환
+        return await query.collect();
     },
 });
 
@@ -321,8 +368,9 @@ export const getTodosByCategory = query({
 
 // 사용자 아이디로 실패 완료 진행중 개수 가져오는 쿼리
 export const getTodoCount = query({
-    args: { userId: v.string() },
+    args: { userId: v.optional(v.string()) },
     handler: async (ctx, args) => {
+        if (!args.userId) return { completed: 0, inProgress: 0, failed: 0 };
         const todos = await ctx.db
             .query("todos")
             .filter((q) => q.eq(q.field("authorId"), args.userId))

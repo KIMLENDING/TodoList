@@ -3,8 +3,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PriorityAndCategorySelectorProps, TodoState } from '@/types/types';
 
-const priorities = ['상', '중', '하'];
-const categories = ['개인', '업무', '학습', '기타'];
+const priorities = ['상', '중', '하', '선택 안함'];
+const categories = ['개인', '업무', '학습', '기타', '선택 안함'];
 
 export default function PriorityAndCategorySelector({ todoState, setTodoState }: PriorityAndCategorySelectorProps) {
     const [initialized, setInitialized] = useState(false);
@@ -15,6 +15,9 @@ export default function PriorityAndCategorySelector({ todoState, setTodoState }:
 
     const handleStateChange = (key: keyof TodoState, value: string) => {
         // 
+        if (value === '선택 안함') {
+            value = '';
+        }
         if (initialized) { // 초기화가 완료된 후에만 상태 변경
             setTodoState((prevState: TodoState) => ({
                 ...prevState,
