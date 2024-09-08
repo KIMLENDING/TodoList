@@ -14,7 +14,9 @@ const TodoList = ({ searchParams: { search } }: { searchParams: { search: string
     const searchTodosData = useQuery(api.todos.searchTodos, { search: search || '' })
     return (
         <div className='flex flex-col gap-9'>
-            <Searchbar />
+            <div className='max-md:hidden'>
+                <Searchbar />
+            </div>
             <section className='w-full mt-10 flex flex-col gap-4 items-center overflow-y-auto no-scrollbar'>
                 <div className='flex flex-col gap-9'>
                     <h1 className="text-[20px] font-bold ">

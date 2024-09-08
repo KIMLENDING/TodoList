@@ -21,8 +21,8 @@ const Searchbar = () => {
     }, [router, debouncedSearch, pathname])
 
     return (
-        <div className='relative mt-8 block'>
-            <Input className='input-class py-6 pl-12 focus-visible:ring-offset-orange-1'
+        <div className='relative mt-8 block '>
+            <Input className=' py-5 pl-12 '
                 placeholder='검색'
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -33,7 +33,7 @@ const Searchbar = () => {
                 width={20}
                 height={20}
                 alt='search'
-                className='absolute top-3.5 left-4'
+                className='absolute top-2.5 left-4'
             />
         </div>
     )

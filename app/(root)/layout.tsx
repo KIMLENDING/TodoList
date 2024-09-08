@@ -4,6 +4,7 @@ import MobileNav from "@/components/Layout/MobileNav";
 import { Toaster } from "@/components/ui/toaster"
 import Image from "next/image";
 import Link from "next/link";
+import Searchbar from "@/components/dashboard/Searchbar";
 
 
 export default function RootLayout({
@@ -23,6 +24,9 @@ export default function RootLayout({
                                     <Image src='/icons/logo.svg' alt='menu icon' width={42} height={42} />
                                 </div>
                             </Link>
+                            <div className="pb-6">
+                                <Searchbar />
+                            </div>
                             <MobileNav />
                         </div>
                         <div className="w-full flex flex-col md:pb-14 " > {/**여긴 items-center 하니까 하위 컴포넌트가 가운데로 가면서 화면을 다 채우지 못해서 지움 */}

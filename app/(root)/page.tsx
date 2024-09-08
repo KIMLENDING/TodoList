@@ -7,8 +7,8 @@ const Deashboard = () => {
 
     return (
         <section className='w-full mt-10 flex flex-col gap-4 items-center overflow-y-auto no-scrollbar'>
-            <div className='h-full' style={{ maxHeight: 'calc(100vh - 10rem)' }}>
-                <div><Searchbar /></div>
+            <div className='flex flex-col h-full gap-8' style={{ maxHeight: 'calc(100vh - 10rem)' }}>
+                <div className='max-md:hidden'><Searchbar /></div>
                 <div className=''>
                     <ProgressBarCard />
                 </div>

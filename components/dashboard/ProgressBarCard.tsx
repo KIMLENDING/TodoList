@@ -32,17 +32,16 @@ const ProgressBarCard = () => {
             return null;
         }
         const getTodoCount = useQuery(api.todos.getTodoCount, { userId: user?.id! });
+        if (getTodoCount === undefined) {
+            return null;
+        }
         const completed = getTodoCount?.completed || 0;
         const inProgress = getTodoCount?.inProgress || 0;
         const failed = getTodoCount?.failed || 0;
         const total = completed + inProgress + failed || 0;
         return { completed, inProgress, failed, total }
     }
-    const getTodoCount = patchTodo() || { completed: 0, inProgress: 0, failed: 0, total: 0 };
-    if (user === null) {
-        return null;
-    }
-    console.log(getTodoCount.total)
+    const getTodoCount = patchTodo();
 
     return (
         <div>
@@ -52,12 +51,11 @@ const ProgressBarCard = () => {
                     <CardDescription></CardDescription>
                 </CardHeader>
                 <CardContent>
-                    {user ? (
+                    {getTodoCount ? (
                         <> <ProgressBar label="완료" value={getTodoCount.completed} max={getTodoCount.total} color="bg-green-600" />
                             <ProgressBar label="진행중" value={getTodoCount.inProgress} max={getTodoCount.total} color="bg-blue-600" />
                             <ProgressBar label="실패" value={getTodoCount.failed} max={getTodoCount.total} color="bg-red-600" /></>
-                    ) : (<><LoaderSpinner /></>)}
-
+                    ) : (<LoaderSpinner />)}
                 </CardContent>
                 <CardFooter>
                 </CardFooter>
