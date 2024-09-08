@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react'
+import React, { useState } from 'react'
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -15,6 +15,8 @@ import { api } from '@/convex/_generated/api';
 import { Id } from '@/convex/_generated/dataModel';
 import { toast } from "@/components/ui/use-toast"
 import { useUser } from '@clerk/nextjs';
+import { set } from 'date-fns';
+import LoaderSpinner from './LoaderSpinner';
 
 interface TodoControlsProps {
     todoId: Id<'todos'>;
@@ -23,6 +25,7 @@ interface TodoControlsProps {
 }
 const TodoControls = ({ isCompleted, todoId }: TodoControlsProps) => {
     const router = useRouter();
+    const [loading, setLoading] = useState(false);
     const updateTodoCompletion = useMutation(api.todos.updateTodoCompletion);
     const deleteTodo = useMutation(api.todos.deleteTodo);
     const handleComplete = async (changeState: string) => {
@@ -30,12 +33,15 @@ const TodoControls = ({ isCompleted, todoId }: TodoControlsProps) => {
             // 완료,실패 처리
             if (changeState === '완료') {
                 // 완료 처리
+                setLoading(true);
                 await updateTodoCompletion({ id: todoId, isCompleted: '완료' });
             } else if (changeState === '실패') {
                 // 실패 처리
+                setLoading(true);
                 await updateTodoCompletion({ id: todoId, isCompleted: '실패' });
             } else if (changeState === '진행중') {
                 // 진행중 처리
+                setLoading(true);
                 await updateTodoCompletion({ id: todoId, isCompleted: '진행중' });
             }
             toast({ title: '상태 업데이트 성공' });
@@ -43,6 +49,8 @@ const TodoControls = ({ isCompleted, todoId }: TodoControlsProps) => {
             // 에러 처리
             toast({ title: '상태 업데이트 실패', variant: 'destructive' });
             console.error('Todo completion update failed:', error);
+        } finally {
+            setLoading(false);
         }
     }
     const handleDelete = async () => {
@@ -63,14 +71,15 @@ const TodoControls = ({ isCompleted, todoId }: TodoControlsProps) => {
         <div onClick={e => {
             e.stopPropagation();
         }}>
+
             <DropdownMenu >
                 <DropdownMenuTrigger>{isCompleted !== '완료' ? (isCompleted === '진행중' ? "진행중" : "실패") : '완료'}</DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <DropdownMenuLabel>설정</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => { handleComplete('완료') }} disabled={isCompleted === '완료'}>완료</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => { handleComplete('실패') }} disabled={isCompleted === '실패'}>실패</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => { handleComplete('진행중') }} disabled={isCompleted === '진행중' || isCompleted === '완료'}>진행중</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => { handleComplete('완료') }} disabled={isCompleted === '완료'}>{loading ? (<><LoaderSpinner /></>) : ('완료')}</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => { handleComplete('실패') }} disabled={isCompleted === '실패'}>{loading ? (<><LoaderSpinner /></>) : ('실패')}</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => { handleComplete('진행중') }} disabled={isCompleted === '진행중' || isCompleted === '완료'}>{loading ? (<><LoaderSpinner /></>) : ('진행중 ')}</DropdownMenuItem>
                     <DropdownMenuItem onClick={handleEdit}>수정</DropdownMenuItem>
                     <DropdownMenuItem onClick={handleDelete}>삭제</DropdownMenuItem>
                     <DropdownMenuItem onClick={handleShare}>공유</DropdownMenuItem>
