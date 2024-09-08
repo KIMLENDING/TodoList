@@ -29,7 +29,7 @@ const TodoList = ({ searchParams: { search } }: { searchParams: { search: string
                         {searchTodosData.length > 0 ? (
                             <div className='h-full w-full' style={{ maxHeight: 'calc(100vh - 17rem)' }}>
                                 <div className="w-full grid grid-cols-1 xl:grid-cols-2  2xl:grid-cols-3 gap-5 auto-rows-max">
-                                    {searchTodosData?.map((todo, index) => (
+                                    {searchTodosData?.map((todo: any, index: any) => (
                                         <TodoCard key={index} todo={todo} />
                                     ))}
                                 </div>

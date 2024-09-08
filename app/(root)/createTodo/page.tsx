@@ -100,15 +100,15 @@ export default function CreateTodo() {
     }
 
     return (
-        <section className="mt-10 pb-10 w-full flex flex-col gap-4 overflow-y-auto no-scrollbar">
-            <div className='h-full' style={{ maxHeight: 'calc(100vh - 10rem)' }}>
+        <section className="mt-10 w-full flex flex-col gap-4 overflow-y-auto no-scrollbar">
+            <div className='h-full ' style={{ maxHeight: 'calc(100vh - 10rem)' }}>
                 <Card className="w-full">
                     <CardHeader>
                         <CardTitle>TODO 작성</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <Form {...form}>
-                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                                 <FormField
                                     control={form.control}
                                     name="todoTitle"
@@ -136,7 +136,7 @@ export default function CreateTodo() {
                                     )}
                                 />
                                 <div className="space-y-4">
-                                    <FormLabel className="text-16 font-bold">기간</FormLabel>
+                                    <FormLabel >기간</FormLabel>
                                     <DateTimePickerWithRange date={date} setDate={setDate} />
                                 </div>
                                 <PriorityAndCategorySelector

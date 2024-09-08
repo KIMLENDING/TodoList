@@ -31,9 +31,9 @@ export default function PriorityAndCategorySelector({ todoState, setTodoState }:
         return null;
     }
     return (
-        <div className="flex flex-row gap-4 ">
+        <div className="flex flex-row gap-2 ">
             <div className="flex flex-row items-center">
-                <Label className="text-16 font-bold text-nowrap">
+                <Label className="text-16 font-bold sm:text-nowrap">
                     카테고리:
                 </Label>
                 <Select
@@ -53,7 +53,7 @@ export default function PriorityAndCategorySelector({ todoState, setTodoState }:
                 </Select>
             </div>
             <div className="flex flex-row items-center ">
-                <Label className="text-16 font-bold text-nowrap">
+                <Label className="text-16 font-bold sm:text-nowrap">
                     우선순위:
                 </Label>
                 <Select
