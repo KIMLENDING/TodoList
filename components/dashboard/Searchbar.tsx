@@ -22,7 +22,7 @@ const Searchbar = () => {
 
     return (
         <div className='relative mt-8 block '>
-            <Input className=' py-5 pl-12 '
+            <Input className=' py-1 pl-12 max-sm:h-8 max-sm:pl-8'
                 placeholder='검색'
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -33,7 +33,7 @@ const Searchbar = () => {
                 width={20}
                 height={20}
                 alt='search'
-                className='absolute top-2.5 left-4'
+                className='absolute top-2.5 left-4 max-sm:top-1.5 max-sm:left-2'
             />
         </div>
     )
