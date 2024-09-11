@@ -16,15 +16,28 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { DateTimePickerWithRangeProps } from "@/types/types"
 import { useState } from "react"
 
-export default function DateTimePickerWithRange({ date, setDate }: DateTimePickerWithRangeProps) {
-    const [allDay, setAllDay] = useState(false);
+export default function DateTimePickerWithRange({ date, setDate, checked = false }: DateTimePickerWithRangeProps) {
+    const [allDay, setAllDay] = useState(checked);
+    const [time, setTime] = useState({
+        from_hours: 0,
+        from_minutes: 0,
+        to_hours: 0,
+        to_minutes: 0,
+    });
+
     const handleDateSelect = (selectedDate: DateRange | undefined) => {
         if (selectedDate?.from) {
-            const newFrom = setHours(setMinutes(selectedDate.from, selectedDate.from.getMinutes()), selectedDate.from.getHours())
-            const newTo = selectedDate.to
-                ? setHours(setMinutes(selectedDate.to, selectedDate.to.getMinutes()), selectedDate.to.getHours())
-                : newFrom
-            setDate({ from: newFrom, to: newTo })
+            if (allDay) { // 대시보드 컴포넌트에서 사용되는 달력일 때 또는 하루종일이 체크되어있을 때
+                const newFrom = setHours(setMinutes(selectedDate.from, 0), 0)
+                const newTo = selectedDate.to ? setHours(setMinutes(selectedDate.to!, 59), 23) : setHours(setMinutes(selectedDate.from, 59), 23)
+                setDate({ from: newFrom, to: newTo })
+            } else {
+                const newFrom = setHours(setMinutes(selectedDate.from, time.from_minutes), time.from_hours)
+                const newTo = selectedDate.to
+                    ? setHours(setMinutes(selectedDate.to, time.to_minutes), time.to_hours)
+                    : newFrom
+                setDate({ from: newFrom, to: newTo })
+            }
         } else {
             setDate(selectedDate)
         }
@@ -32,7 +45,11 @@ export default function DateTimePickerWithRange({ date, setDate }: DateTimePicke
 
     const handleTimeChange = (timeStr: string, isFrom: boolean) => {
         const [hours, minutes] = timeStr.split(':').map(Number)
-
+        if (isFrom) {
+            setTime(prevTime => ({ ...prevTime, from_hours: hours, from_minutes: minutes }))
+        } else {
+            setTime(prevTime => ({ ...prevTime, to_hours: hours, to_minutes: minutes }))
+        }
         setDate(prevDate => {
             if (!prevDate?.from) return prevDate
             const newDate = { ...prevDate }
@@ -46,17 +63,16 @@ export default function DateTimePickerWithRange({ date, setDate }: DateTimePicke
             } else {
                 newDate.to = updatedDate
             }
-
             return newDate
         })
     }
+
+
     const handleClick = () => {
         setAllDay(!allDay); // 하루 종일 체크박스 클릭시
-
         if (!allDay) { // setAllDay가 false일때 실행 true로 바꿀 때 실행 되는 거임 
             //(state가 비동기라서 바로 allDay가 true로 바뀌지 않음) 
             //{업데이터 함수 사용하고  if문은 useEffect로 처리함면됨 }
-            console.log("allDay---")
             setDate(prevDate => {
                 if (!prevDate?.from) return prevDate
                 // const newDate = { ...prevDate }
@@ -66,8 +82,6 @@ export default function DateTimePickerWithRange({ date, setDate }: DateTimePicke
             }) // 하루 종일 체크박스 클릭시 00:00 ~ 23:59로 변경
         }
     }
-
-
     const compareYear = date?.from?.getFullYear() === date?.to?.getFullYear();
     const compareMonth = date?.from?.getMonth() === date?.to?.getMonth();
     const compareDay = date?.from?.getDate() === date?.to?.getDate();
@@ -109,7 +123,6 @@ export default function DateTimePickerWithRange({ date, setDate }: DateTimePicke
                         numberOfMonths={2}
                     />
                     <div className="flex justify-end space-x-2 p-3">
-
                         <div className="flex items-center gap-1">
                             <Checkbox id="terms1" checked={allDay} onClick={handleClick} />
                             <label
@@ -118,7 +131,6 @@ export default function DateTimePickerWithRange({ date, setDate }: DateTimePicke
                             >
                                 하루 종일
                             </label>
-
                         </div>{!allDay && <>
                             <Input
                                 type="time"
@@ -134,10 +146,7 @@ export default function DateTimePickerWithRange({ date, setDate }: DateTimePicke
                             />
                         </>
                         }
-
-
                     </div>
-
                 </PopoverContent>
             </Popover>
         </div>

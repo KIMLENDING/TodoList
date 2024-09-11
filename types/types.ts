@@ -71,4 +71,5 @@ export interface TagInputProps {
 export interface DateTimePickerWithRangeProps {
     date: DateRange | undefined
     setDate: React.Dispatch<React.SetStateAction<DateRange | undefined>>
+    checked?: boolean
 }

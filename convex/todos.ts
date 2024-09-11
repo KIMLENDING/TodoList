@@ -364,8 +364,6 @@ export const getTodosByCategory = query({
     },
 });
 
-// 태그로 Todo 항목을 검색하는 쿼리 (새로 추가)
-
 // 사용자 아이디로 실패 완료 진행중 개수 가져오는 쿼리
 export const getTodoCount = query({
     args: { userId: v.optional(v.string()) },
@@ -382,4 +380,38 @@ export const getTodoCount = query({
     },
 });
 
+
+// 생성일 별 작성한 Todo 항목을 가져오는 쿼리 (하루치 데이터)
+export const getTodosByDay = query({
+    args: {
+        date: v.optional(v.object({
+            from: v.optional(v.number()),
+            to: v.optional(v.number())
+        })),
+        userId: v.optional(v.string())
+    },
+    handler: async (ctx, args) => {
+        if (!args.userId) return [];
+        const todos = await ctx.db
+            .query("todos")
+            .filter((q) => q.eq(q.field("authorId"), args.userId))
+            .collect();
+
+        console.log(args.date?.from)
+        console.log(args.date?.to)
+        if (todos.length === 0) return [];
+        if (!args.date?.from || !args.date?.to) return [];
+
+        const filteredTodos = todos.filter((todo) => {
+            const a = todo._creationTime;
+            if (args.date?.from && args.date?.to) {
+                if (a >= args.date.from && a <= args.date.to) {
+                    return true;
+                }
+            }
+            return false;
+        });
+        return filteredTodos;
+    },
+});
 
