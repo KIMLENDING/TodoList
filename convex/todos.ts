@@ -147,6 +147,7 @@ export const updateTodo = mutation({
         repeatType: v.optional(v.string()), //  repeatType: '매일||매주||매달||매년' // 반복 설정
         progress: v.optional(v.number()),
         isCompleted: v.string(), // 완료 여부 // 완료, 진행중, 실패
+        completedAt: v.optional(v.number()), // 완료 시간 (시간)
     },
     handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity(); // 사용자 정보 가져오기

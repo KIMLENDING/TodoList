@@ -105,6 +105,8 @@ const TodoDetail = ({ params }: PageProps) => {
             const { urls, storageIds, types, names } = await handleUpload();
             if (todoData) {
                 const { _creationTime, user, author, authorId, authorImageUrl, ...todo } = todoData;
+                console.log(todo);
+                console.log(todo.isCompleted);
                 try {
                     await updateTodo({
                         ...todo,
@@ -121,6 +123,7 @@ const TodoDetail = ({ params }: PageProps) => {
                             attachmentNames: [...(todo?.attachments?.attachmentNames ?? []), ...names],
                         },
                         isCompleted: todo.isCompleted,
+                        completedAt: todo.completedAt,
                     });
                     toast({ title: 'todo 업데이트 성공' });
                     router.push('/todos');
