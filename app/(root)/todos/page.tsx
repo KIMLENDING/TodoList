@@ -7,10 +7,19 @@ import TodoCard from '@/components/TodoCard';
 
 
 import { api } from '@/convex/_generated/api'
+import { useUser } from '@clerk/nextjs';
 import { useQuery } from 'convex/react'
-import React from 'react'
+import { useRouter } from 'next/navigation';
+import React, { useEffect } from 'react'
 
 const TodoList = ({ searchParams: { search } }: { searchParams: { search: string } }) => {
+    const router = useRouter();
+    const { user } = useUser();
+    useEffect(() => {
+        if (!user) {
+            router.push('/sign-in');
+        }
+    }, [])
     const searchTodosData = useQuery(api.todos.searchTodos, { search: search || '' })
     return (
         <div className='flex flex-col gap-9'>

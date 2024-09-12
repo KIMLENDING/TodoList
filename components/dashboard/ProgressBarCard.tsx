@@ -1,9 +1,11 @@
 import React from 'react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card'
-import { useUser } from '@clerk/nextjs';
+import { SignedOut, useUser } from '@clerk/nextjs';
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import LoaderSpinner from '../LoaderSpinner';
+import { Button } from '../ui/button';
+import Link from 'next/link';
 interface ProgressBarProps {
     label: string;
     value: number;
@@ -40,7 +42,13 @@ const ProgressBarCard = () => {
                     <CardDescription></CardDescription>
                 </CardHeader>
                 <CardContent>
-                    {!user ? (<>로그인 해주세요</>) : (<>
+                    {!user ? (<><SignedOut>
+                        <div className='flex-center w-full pb-14 max-lg:px-4 lg:pr-8'>
+                            <Button asChild className='text-[16px] w-full bg-blue-400 font-extrabold'>
+                                <Link href='/sign-in'>로그인</Link>
+                            </Button>
+                        </div>
+                    </SignedOut></>) : (<>
                         {getTodoCount ? (
                             <> <ProgressBar label="완료" value={completed} max={total} color="bg-green-600" />
                                 <ProgressBar label="진행중" value={inProgress} max={total} color="bg-blue-600" />

@@ -23,7 +23,7 @@ const DateRangeSelect = () => {
     return (
         <div className='w-full grid grid-cols-1'>
             <Card >
-                <CardHeader>
+                <CardHeader className='overflow-auto'>
                     <CardTitle>날짜 선택</CardTitle>
                     <DateTimePickerWithRange date={date} setDate={setDate} checked={true} />
                 </CardHeader>

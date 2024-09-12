@@ -12,7 +12,10 @@ const Deashboard = () => {
             <div className='flex w-full flex-col h-full gap-8' style={{ maxHeight: 'calc(100vh - 10rem)' }}>
                 <div className='max-md:hidden'><Searchbar /></div>
                 <div className='w-full flex-1 flex flex-col gap-4'>
-                    <ProgressBarCard /> {/** 진행률 */}
+                    <div>
+
+                        <ProgressBarCard /> {/** 진행률 */}
+                    </div>
                     <PriorityAndCategoryCard /> {/** 우선순위, 카테고리로 필터링 */}
                     <DateRangeSelect /> {/** 기간으로 생성한 todo 필터링 */}
                 </div>
