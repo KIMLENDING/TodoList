@@ -398,8 +398,6 @@ export const getTodosByDay = query({
             .filter((q) => q.eq(q.field("authorId"), args.userId))
             .collect();
 
-        console.log(args.date?.from)
-        console.log(args.date?.to)
         if (todos.length === 0) return [];
         if (!args.date?.from || !args.date?.to) return [];
 

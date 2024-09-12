@@ -82,16 +82,7 @@ const TodoCard = ({ todo }: Todo) => {
                         <div className='flex flex-row gap-4 justify-between items-center'>
                             <Link href={`/todos/${todo._id}`} className="flex-1 min-w-0"> {/* min-w-0: 최소 너비 0 기본은 auto라서 자식요소의 공간을 최대한 확보하려 하기 때문에 자식요소가 커지는 것을 방지*/}
                                 <CardTitle className="flex-1 overflow-hidden">
-                                    {/* <div className='truncate'>{todo.todoTitle}</div> */}
                                     <TextScrolling text={todo.todoTitle} />
-                                    {/* <TooltipProvider>
-                                        <Tooltip>
-                                            <TooltipTrigger><TextScrolling text={todo.todoTitle} /></TooltipTrigger>
-                                            <TooltipContent>
-                                                <p>{todo.todoTitle}</p>
-                                            </TooltipContent>
-                                        </Tooltip>
-                                    </TooltipProvider> */}
                                 </CardTitle>
                             </Link>
                             <div className="flex-shrink-0"> {/* 요소 크기 유지 */}

@@ -57,7 +57,7 @@ export default function PriorityAndCategorySelector({ todoState, setTodoState }:
                     우선순위:
                 </Label>
                 <Select
-                    onValueChange={(value: string) => { handleStateChange('priority', value); console.log('value:', value, 'todos:', todoState); }}
+                    onValueChange={(value: string) => { handleStateChange('priority', value); }}
                     value={todoState.priority}
                 >
                     <SelectTrigger className="w-full border-none text-16 font-bold">

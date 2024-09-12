@@ -105,8 +105,6 @@ const TodoDetail = ({ params }: PageProps) => {
             const { urls, storageIds, types, names } = await handleUpload();
             if (todoData) {
                 const { _creationTime, user, author, authorId, authorImageUrl, ...todo } = todoData;
-                console.log(todo);
-                console.log(todo.isCompleted);
                 try {
                     await updateTodo({
                         ...todo,

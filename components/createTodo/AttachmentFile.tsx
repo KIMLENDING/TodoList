@@ -33,9 +33,7 @@ const AttachmentFile = ({ onUploadComplete }: AttachmentFileProps) => {
         }
 
         try {
-            console.log('handleUpload');
             const uploaded = await startUpload(selectedFiles);
-            console.log('uploaded', uploaded);
             const storageIds = uploaded.map(({ response }: any) => response.storageId);
             const types = uploaded.map(({ type }: any) => type);
             const names = uploaded.map(({ name }: any) => name);
