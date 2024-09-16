@@ -13,7 +13,6 @@ const Deashboard = () => {
                 <div className='max-md:hidden'><Searchbar /></div>
                 <div className='w-full flex-1 flex flex-col gap-4'>
                     <div>
-
                         <ProgressBarCard /> {/** 진행률 */}
                     </div>
                     <PriorityAndCategoryCard /> {/** 우선순위, 카테고리로 필터링 */}

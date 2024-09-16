@@ -14,8 +14,7 @@ import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { Id } from '@/convex/_generated/dataModel';
 import { toast } from "@/components/ui/use-toast"
-import { useUser } from '@clerk/nextjs';
-import { set } from 'date-fns';
+
 import LoaderSpinner from './LoaderSpinner';
 
 interface TodoControlsProps {

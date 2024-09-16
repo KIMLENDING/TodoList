@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -136,3 +140,42 @@
   -webkit-backdrop-filter: blur(37px);
 }
 
+.xScrollbars {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.xScrollbars::-webkit-scrollbar {
+  display: none; /* Chrome and Safari */
+}
+
+.fade {
+  opacity: 0;
+
+  @media (prefers-reduced-motion) {
+    opacity: 1;
+    animation: none;
+  }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+
+  @media (prefers-reduced-motion) {
+    transform: translateY(0px);
+    opacity: 1;
+    animation: none;
+  }
+}
+
+.scaleFade {
+  opacity: 0;
+  transform: scale(0.75);
+
+  @media (prefers-reduced-motion) {
+    transform: scale(1);
+    opacity: 1;
+    animation: none;
+  }
+}
