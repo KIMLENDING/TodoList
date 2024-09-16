@@ -1,6 +1,7 @@
 import React from 'react';
 import { startOfYear, endOfYear, format } from 'date-fns';
-
+import { useInView } from 'react-intersection-observer'
+import { cn } from '@/lib/utils'
 import { DateRange } from 'react-day-picker';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
@@ -10,6 +11,10 @@ interface YearSelectorProps {
 }
 
 export default function YearSelector({ onDateChange }: YearSelectorProps) {
+    const { ref, inView } = useInView({
+        threshold: 0.5,
+        triggerOnce: true,
+    })
     const currentDate = new Date();
     const [date, setDate] = React.useState<DateRange>({
         from: startOfYear(currentDate),
@@ -38,22 +43,26 @@ export default function YearSelector({ onDateChange }: YearSelectorProps) {
     }, []);
 
     return (
-        <div>
-            <div className="flex flex-row items-start gap-4 max-sm:flex-col">
-                <Select onValueChange={handleYearSelect} value={selectedYear.toString()}>
-                    <SelectTrigger className="w-[120px]">
-                        <SelectValue placeholder="년도 선택" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {years.map((year) => (
-                            <SelectItem key={year} value={year.toString()}>
-                                {year}년
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-            </div>
+
+        <div className={cn(
+            'reveal sticky top-5 z-10 mx-auto rounded-full bg-white-1 px-3 py-1 text-xs font-bold text-zinc-500 first-of-type:mt-10 max-w-[120px] ',
+            { 'animate-revealSm': inView },
+        )}
+            ref={ref}>
+            <Select onValueChange={handleYearSelect} value={selectedYear.toString()} >
+                <SelectTrigger className='  focus:ring-0 focus:ring-white-1 border-0'>
+                    <SelectValue placeholder="년도 선택" />
+                </SelectTrigger>
+                <SelectContent>
+                    {years.map((year) => (
+                        <SelectItem key={year} value={year.toString()}>
+                            {year}년
+                        </SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
         </div>
+
     );
 }
 

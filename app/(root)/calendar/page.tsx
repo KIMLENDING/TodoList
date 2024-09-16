@@ -1,7 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react'
-import { useInView } from 'react-intersection-observer'
-import useClickOutside from '@/hooks/useClickOutside'
+import React, { useState } from 'react'
 import { DateRange } from 'react-day-picker';
 import { useUser } from '@clerk/nextjs';
 import { useQuery } from 'convex/react';
@@ -10,9 +8,7 @@ import 'dayjs/locale/ko';
 
 import YearMonthSelector from '@/components/YearMonthSelector';
 import dayjs from 'dayjs'
-import { cn } from '@/lib/utils';
-import TextBlock from '@/components/TextBlock';
-import Tooltip from '@/components/Tooltip';
+
 import Calendar from '@/components/Calendar';
 import Tag from '@/components/Tag';
 import { format } from 'date-fns';
@@ -65,9 +61,9 @@ const CalendarPage = () => {
     console.log(groupedByDate)
     return (
         <div>
-            <div className='mt-10 w-full flex flex-col gap-4 overflow-y-auto no-scrollbar'>
+            <div className=''>
                 <YearMonthSelector onDateChange={handleDateChange} />
-                <Tag year={format(date?.from! || new Date(), 'yyyy')} />
+                {/* <Tag year={format(date?.from! || new Date(), 'yyyy')} /> */}
                 <div className="w-full grid grid-cols-1 xl:grid-cols-2  2xl:grid-cols-3  auto-rows-max">
                     {Object.keys(groupedByDate).map((year_month) => (
                         <div key={year_month}>

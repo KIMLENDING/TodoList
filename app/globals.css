@@ -179,3 +179,7 @@
     animation: none;
   }
 }
+
+.no-outline {
+  outline: none;
+}
