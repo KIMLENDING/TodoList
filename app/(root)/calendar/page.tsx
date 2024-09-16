@@ -13,8 +13,10 @@ import dayjs from 'dayjs'
 import { cn } from '@/lib/utils';
 import TextBlock from '@/components/TextBlock';
 import Tooltip from '@/components/Tooltip';
-
-const Calendar = () => {
+import Calendar from '@/components/Calendar';
+import Tag from '@/components/Tag';
+import { format } from 'date-fns';
+const CalendarPage = () => {
     // 날짜 선택 + 유저 정보 + 해당 날짜의 할 일 정보
     const [date, setDate] = useState<DateRange | undefined>({
         from: undefined,
@@ -22,219 +24,64 @@ const Calendar = () => {
     });
     const { user } = useUser();
     const getTodosByDay = useQuery(api.todos.getTodosByDay, { date: { from: Number(date?.from), to: Number(date?.to) }, userId: user?.id });
-
-    const [calBgColor, setCalBgColor] = useState(0) // 캘린더 배경 색
-    const [takeover, setTakeover] = useState(false)
-    const [clip, setClip] = useState(false)
-    const [loadIn, setLoadIn] = useState(true)
-    const [activeTileIndex, setActiveTileIndex] = useState<number | null>(null);
-
-    // 타일 생성
-    const getYear = date?.from?.getFullYear()
-    const getMonth = date?.from?.getMonth()
-
-    const currentYear = dayjs().year(getYear!) // 년도 가져오기
-    const currentMonth = dayjs(currentYear).month(getMonth!) // 월 가져오기 0~11
-
-    const monthStartDay =
-        ((dayjs(currentMonth).startOf('month').day()))  // (일,월,화,수,목,금,토) 0~6 (0,1,2,3,4,5,6) 
-    const blankTiles = Array.from({ length: monthStartDay }) // 빈 타일 만들기
-    const monthDays = dayjs().month(getMonth! || 0).daysInMonth() // 해당 월의 일 수
-    const tiles = Array.from({ length: monthDays }) // 해당 월의 타일 만들기
-
-    // 동작 함수
-    const clickOutsideRef = useClickOutside(() => {
-        console.log('clickOutsideRef')
-        setTakeover(false)
-        setClip(false)
-        setCalBgColor(0)
-        setActiveTileIndex(null)
-    })
-
-    const { ref, inView } = useInView({ // inView는 해당 요소가 화면에 보이는지 여부를 알려준다.
-        threshold: 0.2, // 0.2는 20%가 화면에 보일 때 inView가 true가 된다.
-        triggerOnce: true, // 한번만 실행되게 한다.
-    })
-    const handleClip = () => {
-        console.log('Clip: true로 변경')
-        setTimeout(() => {
-            setClip(true)
-        }, 500)
-    }
-
-    const handleLoadIn = () => {
-        console.log('LoadIn: false로 변경')
-        setTimeout(() => {
-            setLoadIn(false)
-        }, 1200)
-    }
-
-    useEffect(() => {
-        handleLoadIn()
-    }, [])
-
+    // console.log(getTodosByDay)
     const handleDateChange = (dateRange: DateRange) => {
         setDate(dateRange); // 날짜 범위 업데이트
     };
-
+    console.log(date?.from)
     // 받아온 할 일 정보를 일별로 분류
-    const groupByDate = (todos: any) => {
-        return todos.reduce((acc: { [date: string]: any[] }, todo: any) => {
+    const groupByMonth = (todos: any) => {
+        // 월을 미리 설정 (01월부터 12월까지)
+        const year = date?.from ? dayjs(date.from).format('YYYY') : dayjs().format('YYYY');
+        const months: { [month: string]: any[] } = {
+            [`${year}-01`]: [],
+            [`${year}-02`]: [],
+            [`${year}-03`]: [],
+            [`${year}-04`]: [],
+            [`${year}-05`]: [],
+            [`${year}-06`]: [],
+            [`${year}-07`]: [],
+            [`${year}-08`]: [],
+            [`${year}-09`]: [],
+            [`${year}-10`]: [],
+            [`${year}-11`]: [],
+            [`${year}-12`]: []
+        };
+
+        return todos.reduce((acc: { [month: string]: any[] }, todo: any) => {
             const creationDate = new Date(todo._creationTime).toLocaleDateString('ko-KR');
-            const dateonly = creationDate.split('.')[2];
-            if (!acc[dateonly]) {
-                acc[dateonly] = [];
+            const monthonly = creationDate.split('.')[1].trim().padStart(2, '0'); // 월 추출 및 두 자릿수로 변환
+            const year_month = year + '-' + monthonly;
+            if (!acc[year_month]) {
+                acc[year_month] = [];
             }
-            acc[dateonly].push(todo);
+            // 해당 월에 할 일 추가
+            acc[year_month].push(todo);
             return acc;
-        }, {});
+        }, months); // 빈 월 배열이 포함된 객체를 초기값으로 설정
     };
-    const groupedByDate: { [date: string]: any[] } = groupByDate(getTodosByDay || []); // 일별 할 일 정보를 받아서 일별로 할 일을 분류한다.
 
-
-    // 완료 비율 계산
-    const getCompletionRate = (todos: any) => {
-        const completedTodos = todos.filter((todo: any) => todo.isCompleted === '완료')
-        const completionRate = Math.floor((completedTodos.length / todos.length) * 100)
-        return completionRate
-    }
-
-    // 완료비율 계산
-    const bgColors = (rate: number) =>
-        // rate가 0이면 zinc-800, 1~20이면 emerald-400, 21~40이면 teal-400, 41~60이면 sky-400, 61~80이면 blue-400, 81~100이면 violet-400
-        cn({
-            'bg-zinc-800': rate === 0,
-            'bg-emerald-100': rate >= 1 && rate <= 20,
-            'bg-emerald-300': rate >= 21 && rate <= 40,
-            'bg-emerald-500': rate >= 41 && rate <= 60,
-            'bg-emerald-600': rate >= 61 && rate <= 80,
-            'bg-emerald-700': rate >= 81 && rate <= 100,
-        })
-
+    const groupedByDate: { [month: string]: any[] } = groupByMonth(getTodosByDay || []); // 일별 할 일 정보를 받아서 일별로 할 일을 분류한다.
+    console.log(groupedByDate)
     return (
         <div>
-            <YearMonthSelector onDateChange={handleDateChange} />
-            <section ref={ref} className='w-full'>
-                <section
-                    className={cn(
-                        'reveal xScrollbars mx-auto my-10 flex w-full max-w-sm flex-col gap-4 overflow-y-scroll rounded-3xl bg-zinc-800 p-7 shadow-xl',
-                        bgColors(calBgColor),
-                        {
-                            'animate-rotate': getMonth! % 2 !== 0 && inView, // 해당 달이 홀수 달일 때 rotate 애니메이션 실행 6도에서 0도로 각도가 돌아옴
-                            'animate-rotateAlt': getMonth! % 2 === 0 && inView, // 해당 달이 짝수 달일 때 rotateAlt 애니메이션 실행 -6도에서 0도로 각도가 돌아옴
-                        },
-                    )}
-                    ref={clickOutsideRef}
-                >
-                    <h2 className="reveal -mt-2 animate-revealSm text-sm font-bold tracking-wider text-zinc-300">
-                        {dayjs().locale('ko').month(getMonth! || 0).format('MMMM')}
-                    </h2>
-                    <div className="grid w-full grid-cols-7 gap-2">
-                        {/* 해당 달의 빈 타일 */}
-                        {blankTiles.map((_, index) => (
-                            <div
-                                className={cn(
-                                    'h-8 w-full rounded-lg bg-zinc-700/15 transition-all duration-300 min-[400px]:h-10',
-                                    {
-                                        'invisible opacity-0 delay-0 duration-0': takeover,
-                                    },
-                                )}
-                                key={index}
-                            />
-                        ))}
-                        {/* 해당 달의 타일 */}
-                        {tiles.map((_, index) => {
-                            const dayData = Object.entries(groupedByDate).find(([date]) => Number(date) === index + 1)?.[1];
-                            const isActive = activeTileIndex === index
-                            return (
-                                <div key={index}
-                                    className={cn({
-                                        'scaleFade animate-scaleFade': loadIn,
-                                    })}
-                                    style={{
-                                        animationDelay: `${index / 50 + 0.04}s`,
-                                    }}>
-                                    {takeover && isActive && (
-                                        <div
-                                            className={cn(
-                                                'absolute left-0 top-0 z-50 flex h-max min-h-full w-full animate-fadeSm flex-col',
-                                                bgColors(getCompletionRate(dayData)),
-                                            )}
-                                        >
-                                            <div className="sticky -top-7 z-10 animate-revealSm pl-2 pt-2">
-                                                <button
-                                                    className="z-50 block w-max rounded-full bg-white-1 px-3 py-1.5 font-bold tracking-wide text-zinc-600 shadow-md transition-transform active:scale-90 sm:hover:scale-90 sm:active:scale-75"
-                                                    onClick={() => {
-                                                        setTakeover(false)
-                                                        setActiveTileIndex(null)
-                                                        setClip(false)
-                                                        setCalBgColor(0)
-                                                        console.log('Takeover: false로 변경')
-                                                        console.log('Active: false로 변경')
-                                                    }}
-                                                >
-                                                    back
-                                                </button>
-                                            </div>
-                                            <ul className="relative my-2 flex w-full flex-col gap-2 odd:*:animate-rotateAlt even:*:animate-rotate">
-                                                {/* 내용이 있을 때 */}
-                                                {dayData?.map(
-                                                    ({ todoTitle, _id, isCompleted }) => (
-                                                        <div key={_id}>
-                                                            <TextBlock todoTitle={todoTitle} isCompleted={isCompleted} _id={_id} />
-                                                        </div>
-                                                    ),
-                                                )}
-                                            </ul>
-                                        </div>
-                                    )}
-                                    {/* 타일 생성 */}
-                                    {dayData ? (
-                                        <div
-                                            className={cn('group/tooltip relative delay-100', {
-                                                'invisible opacity-0 delay-0': takeover && !isActive,
-                                                'overflow-clip': clip,
-                                            })}
-                                        >
-                                            <Tooltip text={String(index + 1)} state={takeover} />
-                                            <button
-                                                onClick={() => {
-                                                    setTakeover(true)
-                                                    handleClip()
-                                                    setActiveTileIndex(index)
-                                                    setTimeout(() => {
-                                                        setCalBgColor(getCompletionRate(dayData) === 0 ? 1 : getCompletionRate(dayData))
-                                                    }, 400)
-                                                }}
-                                                className={cn(
-                                                    'block h-8 w-full rounded-lg transition-all duration-150 hover:scale-90 active:scale-75 min-[400px]:h-10',
-                                                    bgColors(getCompletionRate(dayData) === 0 ? 1 : getCompletionRate(dayData)),
-                                                    {
-                                                        'scale-[20] cursor-default duration-300 hover:scale-[20] active:scale-[20]':
-                                                            isActive && takeover,
-                                                    },
-                                                )}
-                                            />
-                                        </div>
-                                    ) : (
-                                        <div
-                                            className={cn(
-                                                'h-8 w-full rounded-lg bg-zinc-700/50 transition-all delay-100 duration-300 min-[400px]:h-10',
-                                                {
-                                                    'invisible opacity-0 delay-0 duration-0': takeover,
-                                                },
-                                            )}
-                                        />
-                                    )}
-                                </div>
-                            );
-                        })}
-                    </div>
-                </section>
-
-            </section>
+            <div className='mt-10 w-full flex flex-col gap-4 overflow-y-auto no-scrollbar'>
+                <YearMonthSelector onDateChange={handleDateChange} />
+                <Tag year={format(date?.from! || new Date(), 'yyyy')} />
+                <div className="w-full grid grid-cols-1 xl:grid-cols-2  2xl:grid-cols-3  auto-rows-max">
+                    {Object.keys(groupedByDate).map((year_month) => (
+                        <div key={year_month}>
+                            {groupedByDate[year_month].length > 0 ? (
+                                <Calendar monthTodos={groupedByDate[year_month]} date={year_month} />
+                            ) : (
+                                <Calendar monthTodos={groupedByDate[year_month]} date={year_month} />
+                            )}
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
     )
 }
 
-export default Calendar
+export default CalendarPage
