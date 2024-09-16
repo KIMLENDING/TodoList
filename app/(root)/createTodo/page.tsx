@@ -34,6 +34,7 @@ import AttachmentFile from "@/components/createTodo/AttachmentFile";
 import TagInput from "@/components/createTodo/TagInput";
 import PriorityAndCategorySelector from "@/components/createTodo/PriorityAndCategorySelector";
 import DateTimePickerWithRange from '@/components/createTodo/DateTimePickerWithRange';
+import Animate from "@/components/Animate";
 const formSchema = z.object({
     todoTitle: z.string().min(2).max(50),
     todoDescription: z.string().min(0).max(200),
@@ -100,71 +101,73 @@ export default function CreateTodo() {
     }
 
     return (
-        <section className="mt-10 w-full flex flex-col gap-4 overflow-y-auto no-scrollbar">
-            <div className='h-full ' style={{ maxHeight: 'calc(100vh - 10rem)' }}>
-                <Card className="w-full">
-                    <CardHeader>
-                        <CardTitle>TODO 작성</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <Form {...form}>
-                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                                <FormField
-                                    control={form.control}
-                                    name="todoTitle"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel className="text-16 font-bold">제목</FormLabel>
-                                            <FormControl>
-                                                <Input placeholder="제목" {...field} />
-                                            </FormControl>
-                                            <FormMessage className="text-red-300" />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="todoDescription"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel className="text-16 font-bold">설명</FormLabel>
-                                            <FormControl>
-                                                <Textarea placeholder="설명" {...field} />
-                                            </FormControl>
-                                            <FormMessage className="text-red-300" />
-                                        </FormItem>
-                                    )}
-                                />
-                                <div className="space-y-4">
-                                    <FormLabel >기간</FormLabel>
-                                    <DateTimePickerWithRange date={date} setDate={setDate} />
-                                </div>
-                                <PriorityAndCategorySelector
-                                    todoState={todoState}
-                                    setTodoState={setTodoState}
-                                />
-                                <div className="space-y-4">
-                                    <FormLabel>Tags</FormLabel>
-                                    <TagInput tags={tags} setTags={setTags} />
-                                </div>
-                                <div className="space-y-4">
-                                    <FormLabel>첨부파일</FormLabel>
-                                    <AttachmentFile onUploadComplete={async (uploadFunc) => { handleUpload = uploadFunc; }} />
-                                </div>
-                                <div className="flex w-full justify-end">
-                                    <Button type="submit" disabled={isLoading}>
-                                        {isLoading ? (
-                                            <div className=" flex-center font-medium ">
-                                                Creating...
-                                                <Loader size={20} className="animate-spin ml-2" />
-                                            </div>) : 'Create Todo'}
-                                    </Button>
-                                </div>
-                            </form>
-                        </Form>
-                    </CardContent>
-                </Card>
-            </div>
-        </section>
+        <Animate index={1}>
+            <section className="mt-10 w-full flex flex-col gap-4 overflow-y-auto no-scrollbar">
+                <div className='h-full' > {/** style={{ maxHeight: 'calc(100vh - 10rem)' }} */}
+                    <Card className="w-full">
+                        <CardHeader>
+                            <CardTitle>TODO 작성</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <Form {...form}>
+                                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                                    <FormField
+                                        control={form.control}
+                                        name="todoTitle"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="text-16 font-bold">제목</FormLabel>
+                                                <FormControl>
+                                                    <Input placeholder="제목" {...field} />
+                                                </FormControl>
+                                                <FormMessage className="text-red-300" />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="todoDescription"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="text-16 font-bold">설명</FormLabel>
+                                                <FormControl>
+                                                    <Textarea placeholder="설명" {...field} />
+                                                </FormControl>
+                                                <FormMessage className="text-red-300" />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <div className="space-y-4">
+                                        <FormLabel >기간</FormLabel>
+                                        <DateTimePickerWithRange date={date} setDate={setDate} />
+                                    </div>
+                                    <PriorityAndCategorySelector
+                                        todoState={todoState}
+                                        setTodoState={setTodoState}
+                                    />
+                                    <div className="space-y-4">
+                                        <FormLabel>Tags</FormLabel>
+                                        <TagInput tags={tags} setTags={setTags} />
+                                    </div>
+                                    <div className="space-y-4">
+                                        <FormLabel>첨부파일</FormLabel>
+                                        <AttachmentFile onUploadComplete={async (uploadFunc) => { handleUpload = uploadFunc; }} />
+                                    </div>
+                                    <div className="flex w-full justify-end">
+                                        <Button type="submit" disabled={isLoading}>
+                                            {isLoading ? (
+                                                <div className=" flex-center font-medium ">
+                                                    Creating...
+                                                    <Loader size={20} className="animate-spin ml-2" />
+                                                </div>) : 'Create Todo'}
+                                        </Button>
+                                    </div>
+                                </form>
+                            </Form>
+                        </CardContent>
+                    </Card>
+                </div>
+            </section>
+        </Animate>
     )
 }

@@ -2,13 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 import useClickOutside from '@/hooks/useClickOutside'
-import { DateRange } from 'react-day-picker';
-import { useUser } from '@clerk/nextjs';
-import { useQuery } from 'convex/react';
-import { api } from '@/convex/_generated/api';
 import 'dayjs/locale/ko';
-
-import YearMonthSelector from '@/components/YearMonthSelector';
 import dayjs from 'dayjs'
 import { cn } from '@/lib/utils';
 import TextBlock from '@/components/TextBlock';

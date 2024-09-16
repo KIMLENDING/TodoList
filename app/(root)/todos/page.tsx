@@ -3,6 +3,7 @@ import Searchbar from '@/components/dashboard/Searchbar';
 import EmptyState from '@/components/EmptyState';
 
 import LoaderSpinner from '@/components/LoaderSpinner';
+import Tag from '@/components/Tag';
 import TodoCard from '@/components/TodoCard';
 
 
@@ -39,7 +40,7 @@ const TodoList = ({ searchParams: { search } }: { searchParams: { search: string
                             <div className='h-full w-full' style={{ maxHeight: 'calc(100vh - 17rem)' }}>
                                 <div className="w-full grid grid-cols-1 xl:grid-cols-2  2xl:grid-cols-3 gap-5 auto-rows-max">
                                     {searchTodosData?.map((todo: any, index: any) => (
-                                        <TodoCard key={index} todo={todo} />
+                                        <TodoCard key={index} todo={todo} index={index} />
                                     ))}
                                 </div>
                             </div>

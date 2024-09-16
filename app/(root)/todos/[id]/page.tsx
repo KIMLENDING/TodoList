@@ -41,6 +41,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Label } from '@/components/ui/label';
 import { useRouter } from 'next/navigation';
+import Animate from '@/components/Animate';
 
 
 interface PageProps {
@@ -185,82 +186,84 @@ const TodoDetail = ({ params }: PageProps) => {
     if (!todoData) return <LoaderSpinner />;
 
     return (
-        <section className="mt-10 w-full flex flex-col gap-4 overflow-y-auto no-scrollbar">
-            <div className='h-full' style={{ maxHeight: 'calc(100vh - 10rem)' }}>
-                <Card className="w-full "> {/* TODO 수정 max-w-2xl mx-auto*/}
-                    <CardHeader className='flex flex-row justify-between'>
-                        <CardTitle>TODO 수정</CardTitle>
-                        <div className='flex flex-row group'>
-                            <div className='text-16 font-bold'>작성일</div>
-                            <div className='flex pr-1'>: {format(todoData._creationTime, "y/LL/dd ")} </div>
-                            <div className='hidden group-hover:block'>- {format(todoData._creationTime, "hh:mm")}</div>
-                        </div>
+        <Animate index={1}>
+            <section className="mt-10 w-full flex flex-col gap-4 overflow-y-auto no-scrollbar">
+                <div className='h-full' > {/**style={{ maxHeight: 'calc(100vh - 7rem)' }} */}
+                    <Card className="w-full "> {/* TODO 수정 max-w-2xl mx-auto*/}
+                        <CardHeader className='flex flex-row justify-between'>
+                            <CardTitle>TODO 수정</CardTitle>
+                            <div className='flex flex-row group'>
+                                <div className='text-16 font-bold'>작성일</div>
+                                <div className='flex pr-1'>: {format(todoData._creationTime, "y/LL/dd ")} </div>
+                                <div className='hidden group-hover:block'>- {format(todoData._creationTime, "hh:mm")}</div>
+                            </div>
 
-                    </CardHeader>
-                    <CardContent>
-                        <Form {...form} >
-                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                                <FormField // 제목
-                                    control={form.control}
-                                    name="todoTitle"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel className="text-16 font-bold" >제목</FormLabel>
-                                            <FormControl>
-                                                <Input placeholder="제목" {...field} />
-                                            </FormControl>
-                                            <FormMessage className="text-red-300" />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField // 내용
-                                    control={form.control}
-                                    name="todoDescription"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel className="text-16 font-bold">일정 내용</FormLabel>
-                                            <FormControl>
-                                                <Textarea className=" " placeholder="일정 내용" {...field} />
-                                            </FormControl>
-                                            <FormMessage className="text-red-300" />
-                                        </FormItem>
-                                    )}
-                                />
-                                <div className="space-y-4">
-                                    <FormLabel className="text-16 font-bold">기간</FormLabel>
-                                    <DateTimePickerWithRange date={date} setDate={setDate} />
-                                </div>
-                                {/* 우선순위, 카테고리 */}
-                                <PriorityAndCategorySelector todoState={todoState} setTodoState={setTodoState} />
-                                <div className="space-y-2">
-                                    <FormLabel className="text-16 font-bold">Tags</FormLabel>
-                                    <TagInput tags={tags} setTags={setTags} />
-                                </div>
-                                <div className="space-y-2">
-                                    <FormLabel className="text-16 font-bold">첨부파일</FormLabel>
-                                    <AttachmentFile onUploadComplete={async (uploadFunc) => { handleUpload = uploadFunc; }} />
-                                </div>
-                                <div className='space-y-2' >
-                                    <Label className="text-16 font-bold">기존 첨부파일</Label>
-                                    <div className='border-black-3 border-2 rounded-sm p-4 overflow-y-auto ' style={{ maxHeight: 'calc(50vh - 10rem)' }}>
-                                        {todoData.attachments && handleattach(todoData.attachments)}
+                        </CardHeader>
+                        <CardContent>
+                            <Form {...form} >
+                                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                                    <FormField // 제목
+                                        control={form.control}
+                                        name="todoTitle"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="text-16 font-bold" >제목</FormLabel>
+                                                <FormControl>
+                                                    <Input placeholder="제목" {...field} />
+                                                </FormControl>
+                                                <FormMessage className="text-red-300" />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField // 내용
+                                        control={form.control}
+                                        name="todoDescription"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="text-16 font-bold">일정 내용</FormLabel>
+                                                <FormControl>
+                                                    <Textarea className=" " placeholder="일정 내용" {...field} />
+                                                </FormControl>
+                                                <FormMessage className="text-red-300" />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <div className="space-y-4">
+                                        <FormLabel className="text-16 font-bold">기간</FormLabel>
+                                        <DateTimePickerWithRange date={date} setDate={setDate} />
                                     </div>
-                                </div>
-                                <div className="flex w-full h-full items-end justify-end">
-                                    <Button type="submit">
-                                        {!isLoading ? 'Update' : (
-                                            <div className=" flex-center font-medium ">
-                                                Updating...
-                                                <Loader size={20} className="animate-spin ml-2" />
-                                            </div>)}
-                                    </Button>
-                                </div>
-                            </form>
-                        </Form>
-                    </CardContent>
-                </Card>
-            </div>
-        </section>
+                                    {/* 우선순위, 카테고리 */}
+                                    <PriorityAndCategorySelector todoState={todoState} setTodoState={setTodoState} />
+                                    <div className="space-y-2">
+                                        <FormLabel className="text-16 font-bold">Tags</FormLabel>
+                                        <TagInput tags={tags} setTags={setTags} />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <FormLabel className="text-16 font-bold">첨부파일</FormLabel>
+                                        <AttachmentFile onUploadComplete={async (uploadFunc) => { handleUpload = uploadFunc; }} />
+                                    </div>
+                                    <div className='space-y-2' >
+                                        <Label className="text-16 font-bold">기존 첨부파일</Label>
+                                        <div className='border-black-3 border-2 rounded-sm p-4 overflow-y-auto ' style={{ maxHeight: 'calc(50vh - 10rem)' }}>
+                                            {todoData.attachments && handleattach(todoData.attachments)}
+                                        </div>
+                                    </div>
+                                    <div className="flex w-full h-full items-end justify-end">
+                                        <Button type="submit">
+                                            {!isLoading ? 'Update' : (
+                                                <div className=" flex-center font-medium ">
+                                                    Updating...
+                                                    <Loader size={20} className="animate-spin ml-2" />
+                                                </div>)}
+                                        </Button>
+                                    </div>
+                                </form>
+                            </Form>
+                        </CardContent>
+                    </Card>
+                </div>
+            </section>
+        </Animate>
     )
 }
 
