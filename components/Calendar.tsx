@@ -18,10 +18,10 @@ const Calendar = ({ monthTodos, date }: CalendarProps) => {
     console.log(date)
 
     const [calBgColor, setCalBgColor] = useState(0) // 캘린더 배경 색
-    const [takeover, setTakeover] = useState(false)
-    const [clip, setClip] = useState(false)
-    const [loadIn, setLoadIn] = useState(true)
-    const [activeTileIndex, setActiveTileIndex] = useState<number | null>(null);
+    const [takeover, setTakeover] = useState(false) // 타일 클릭 시 타일 내용을 보여주는 창
+    const [clip, setClip] = useState(false) // 요소의 내용이 넘치면 숨김 처리
+    const [loadIn, setLoadIn] = useState(true) // 타일의 초기 애니메이션
+    const [activeTileIndex, setActiveTileIndex] = useState<number | null>(null); // 현재 활성화된 타일의 인덱스
 
     // 타일 생성
 
@@ -40,7 +40,7 @@ const Calendar = ({ monthTodos, date }: CalendarProps) => {
     const tiles = Array.from({ length: monthDays }) // 해당 월의 타일 만들기
 
     // 동작 함수
-    const clickOutsideRef = useClickOutside(() => {
+    const clickOutsideRef = useClickOutside(() => { // 해당 요소 외부를 클릭하면 실행
         console.log('clickOutsideRef')
         setTakeover(false)
         setClip(false)
@@ -53,14 +53,14 @@ const Calendar = ({ monthTodos, date }: CalendarProps) => {
         triggerOnce: true, // 한번만 실행되게 한다.
     })
     const handleClip = () => {
-        console.log('Clip: true로 변경')
+        // 타일의 컨텐츠가 일정 시간이 지나면 클리핑되도록 설정
         setTimeout(() => {
             setClip(true)
         }, 500)
     }
 
     const handleLoadIn = () => {
-        console.log('LoadIn: false로 변경')
+        // 타일의 초기 애니메이션 - 초기 로딩 상태를 false로 변경
         setTimeout(() => {
             setLoadIn(false)
         }, 1200)
@@ -133,10 +133,10 @@ const Calendar = ({ monthTodos, date }: CalendarProps) => {
                             key={index}
                         />
                     ))}
-                    {/* 해당 달의 타일 */}
+                    {/* 해당 달의 타일에 내용이 있을 때 자세한 내용을 보여주는 창 takeover가 true일 때*/}
                     {tiles.map((_, index) => {
                         const dayData = Object.entries(groupedByDate).find(([date]) => Number(date) === index + 1)?.[1]; // 해당 날짜의 할 일 정보
-                        const isActive = activeTileIndex === index
+                        const isActive = activeTileIndex === index // 활성화된 타일은 더 큰 크기로 렌더링됨
                         return (
                             <div key={index}
                                 className={cn({
@@ -149,7 +149,7 @@ const Calendar = ({ monthTodos, date }: CalendarProps) => {
                                     <div
                                         className={cn(
                                             'absolute left-0 top-0 z-50 flex h-max min-h-full w-full animate-fadeSm flex-col',
-                                            bgColors(getCompletionRate(dayData)),
+                                            bgColors(getCompletionRate(dayData) === 0 ? 1 : getCompletionRate(dayData)),
                                         )}
                                     >
                                         <div className="sticky -top-7 z-10 animate-revealSm pl-2 pt-2">
@@ -160,8 +160,6 @@ const Calendar = ({ monthTodos, date }: CalendarProps) => {
                                                     setActiveTileIndex(null)
                                                     setClip(false)
                                                     setCalBgColor(0)
-                                                    console.log('Takeover: false로 변경')
-                                                    console.log('Active: false로 변경')
                                                 }}
                                             >
                                                 back
@@ -186,7 +184,7 @@ const Calendar = ({ monthTodos, date }: CalendarProps) => {
                                             'invisible opacity-0 delay-0': takeover && !isActive,
                                             'overflow-clip': clip,
                                         })}
-                                    >
+                                    >{/** 일정이 있는 타일 생성 */}
                                         <Tooltip text={String(index + 1)} state={takeover} />
                                         <button
                                             onClick={() => {
@@ -209,13 +207,18 @@ const Calendar = ({ monthTodos, date }: CalendarProps) => {
                                     </div>
                                 ) : (
                                     <div
-                                        className={cn(
-                                            'h-8 w-full rounded-lg bg-zinc-700/50 transition-all delay-100 duration-300 min-[400px]:h-10',
-                                            {
-                                                'invisible opacity-0 delay-0 duration-0': takeover,
-                                            },
-                                        )}
-                                    />
+                                        className={cn('group/tooltip relative delay-100')}
+                                    >  {/* 일정이 없는 타일 생성 */}
+                                        <Tooltip text={String(index + 1)} state={false} />
+                                        <div
+                                            className={cn(
+                                                'h-8 w-full rounded-lg bg-zinc-700/50 transition-all delay-100 duration-300 min-[400px]:h-10',
+                                                {
+                                                    'invisible opacity-0 delay-0 duration-0': takeover,
+                                                },
+                                            )}
+                                        />
+                                    </div>
                                 )}
                             </div>
                         );
