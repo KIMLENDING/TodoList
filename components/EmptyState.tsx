@@ -13,7 +13,7 @@ const EmptyState = ({ title, search = true, buttonLink, buttonText }: EmptyState
                 height={250}
                 alt='empty State'
             />
-            <div className='flex-center w-full max-x-[254px] flex-col gap-3'>
+            <div className='flex-center w-full max-x-[254px] flex-col gap-3 py-1'>
                 <h1 className="text-16 text-center font-medium ">{title}</h1>
                 {search && (
                     <p className="text-16 text-center font-medium ">
@@ -22,8 +22,8 @@ const EmptyState = ({ title, search = true, buttonLink, buttonText }: EmptyState
                     </p>
                 )}
                 {buttonLink && (
-                    <Button >
-                        <Link href={buttonLink} className='flex gap-2'>
+                    <Button className='bg-[#181818] shadow-md shadow-[#181818] my-1 hover:bg-[#1f1f1f] hover:shadow-red-100 hover:shadow-sm'>
+                        <Link href={buttonLink} className='flex gap-2 '>
                             <Image
                                 src="/icons/pencil-line.svg"
                                 width={20}

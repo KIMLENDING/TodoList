@@ -64,7 +64,7 @@ const CalendarPage = () => {
             <div className=''>
                 <YearMonthSelector onDateChange={handleDateChange} />
                 {/* <Tag year={format(date?.from! || new Date(), 'yyyy')} /> */}
-                <div className="w-full grid grid-cols-1 xl:grid-cols-2  2xl:grid-cols-3  auto-rows-max">
+                <div className="w-full grid grid-cols-1 xl:grid-cols-2  2xl:grid-cols-3  auto-rows-max gap-4">
                     {Object.keys(groupedByDate).map((year_month) => (
                         <div key={year_month}>
                             {groupedByDate[year_month].length > 0 ? (

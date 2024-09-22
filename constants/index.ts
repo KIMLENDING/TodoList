@@ -5,6 +5,11 @@ export const sidebarLinks = [
         label: "홈",
     },
     {
+        imgURL: "/icons/alarm-clock.svg",
+        route: "/routine",
+        label: "루틴",
+    },
+    {
         imgURL: "/icons/list-todo.svg",
         route: "/todos",
         label: "TODO 목록",

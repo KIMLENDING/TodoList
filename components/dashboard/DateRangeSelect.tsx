@@ -35,7 +35,7 @@ const DateRangeSelect = () => {
                                 getTodosByDay.length === 0 ? (
                                     <div>자료가 없습니다</div>
                                 ) : (
-                                    <div className='flex flex-col w-full h-[500px] gap-2 min-w-0 overflow-y-scroll'>
+                                    <div className='flex flex-col w-full max-h-[500px] gap-2 min-w-0 overflow-y-scroll'>
                                         {getTodosByDay?.map(({ _id, todoTitle, _creationTime, isCompleted }) => (
                                             <Card key={_id}>
                                                 <CardHeader>

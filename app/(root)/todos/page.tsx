@@ -3,7 +3,6 @@ import Searchbar from '@/components/dashboard/Searchbar';
 import EmptyState from '@/components/EmptyState';
 
 import LoaderSpinner from '@/components/LoaderSpinner';
-import Tag from '@/components/Tag';
 import TodoCard from '@/components/TodoCard';
 
 
@@ -23,13 +22,13 @@ const TodoList = ({ searchParams: { search } }: { searchParams: { search: string
     }, [])
     const searchTodosData = useQuery(api.todos.searchTodos, { search: search || '' })
     return (
-        <div className='flex flex-col gap-9'>
+        <div className='flex flex-col gap-9 '>
             <div className='max-md:hidden'>
                 <Searchbar />
             </div>
             <section className='w-full mt-10 flex flex-col gap-4 items-center overflow-y-auto no-scrollbar'>
                 <div className='flex flex-col gap-9'>
-                    <h1 className="text-[20px] font-bold ">
+                    <h1 className="text-[20px] font-bold  ">
                         {!search ? '최근 작성한 일정' : '검색 결과: '}
                         {search && <span className=''>{search}</span>}
                     </h1>
