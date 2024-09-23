@@ -49,7 +49,6 @@ const EditRoutines = ({
                     <div className="flex justify-between items-center">
                         <CardTitle className="text-md font-semibold">
                             {Data.title}
-                            {hoverIdP}
                         </CardTitle>
                         <div className={`duration-300 transition-all ${hoverIdP === Data.dndId ? 'hover:opacity-100 ' : 'opacity-0 pointer-events-none'}`}>
                             <DropDownRoutines title={Data.title} dndId={Data.dndId} description={Data.description} handleDelet2={() => handleDelet2(Data.dndId)} setEdit2={setEdit2} setTitle={setTitle} setDescription={setDescription} setChoisePId={setSelectedRsId} />
