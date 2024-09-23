@@ -80,16 +80,16 @@ const TodoCard = ({ todo, index }: any) => {
         triggerOnce: true, // 한번만 실행되게 한다.
     })
     return (
-        <section ref={ref} className='w-full'>
+        <section ref={ref} className='w-full '>
             <section className={cn(
-                'reveal xScrollbars mx-auto  flex w-full  flex-col gap-4 overflow-y-scroll rounded-3xl   shadow-xl',
+                'reveal xScrollbars mx-auto  flex w-full  flex-col gap-4 overflow-y-scroll rounded-3xl   shadow-xl p-2',
                 {
                     'animate-rotate': index! % 2 !== 0 && inView, // 해당 달이 홀수 달일 때 rotate 애니메이션 실행 6도에서 0도로 각도가 돌아옴
                     'animate-rotateAlt': index! % 2 === 0 && inView, // 해당 달이 짝수 달일 때 rotateAlt 애니메이션 실행 -6도에서 0도로 각도가 돌아옴
                 },
             )}>
 
-                <Card className='w-full flex flex-col'>
+                <Card className='w-full flex flex-col bg-[#1f1f1f] text-white-1 border-none'>
                     <CardHeader>
                         <div className='flex flex-col'>
                             <div className='flex flex-row gap-4 justify-between items-center'>

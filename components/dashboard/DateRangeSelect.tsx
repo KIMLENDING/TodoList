@@ -22,7 +22,7 @@ const DateRangeSelect = () => {
     const getTodosByDay = useQuery(api.todos.getTodosByDay, { date: { from: Number(date?.from), to: Number(date?.to) }, userId: user?.id });
     return (
         <div className='w-full grid grid-cols-1'>
-            <Card >
+            <Card className='hover:ring-0'>
                 <CardHeader className='overflow-auto'>
                     <CardTitle>날짜 선택</CardTitle>
                     <DateTimePickerWithRange date={date} setDate={setDate} checked={true} />
@@ -35,9 +35,9 @@ const DateRangeSelect = () => {
                                 getTodosByDay.length === 0 ? (
                                     <div>자료가 없습니다</div>
                                 ) : (
-                                    <div className='flex flex-col w-full max-h-[500px] gap-2 min-w-0 overflow-y-scroll'>
+                                    <div className='flex flex-col w-full max-h-[500px] gap-2 min-w-0 overflow-y-scroll p-1'>
                                         {getTodosByDay?.map(({ _id, todoTitle, _creationTime, isCompleted }) => (
-                                            <Card key={_id}>
+                                            <Card key={_id} >
                                                 <CardHeader>
                                                     <div className='flex flex-col'>
                                                         <div className='flex flex-row gap-4 justify-between items-center'>

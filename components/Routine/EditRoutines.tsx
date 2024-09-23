@@ -3,6 +3,7 @@ import React from 'react'
 import DropDownRoutines from './DropDownRoutines'
 import { Routines } from './Routine'
 import useRoutineStore from '@/store/Routine'
+import { CardTitle } from '../ui/card'
 
 
 interface EditRoutinesProps {
@@ -43,9 +44,9 @@ const EditRoutines = ({
             </>) : (<>
                 <div className='flex flex-col w-full gap-1 px-3 '>
                     <div className="flex justify-between items-center">
-                        <span className="text-sm font-semibold">
+                        <CardTitle className="text-md font-semibold">
                             {Data.title}
-                        </span>
+                        </CardTitle>
                         <div className='opacity-0 group-hover:opacity-100 duration-300 transition-all'>
                             <DropDownRoutines title={Data.title} _id={Data._id} discription={Data.discription} handleDelet2={() => handleDelet2(Data._id)} setEdit2={setEdit2} setTitle={setTitle} setDiscription={setDiscription} setChoisePId={setSelectedRsId} />
                         </div>

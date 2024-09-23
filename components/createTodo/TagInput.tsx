@@ -30,7 +30,7 @@ const TagInput: React.FC<TagInputProps> = ({ initialTags = [], tags, setTags }) 
 
     return (
         <div className="w-full ">
-            <div className="mb-4">
+            <div className="mb-4 text-black-1">
                 <input
                     type="text"
                     value={tagInput}

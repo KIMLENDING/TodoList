@@ -120,7 +120,7 @@ const Calendar = ({ monthTodos, date }: CalendarProps) => {
                 <h2 className="reveal -mt-2 animate-revealSm text-sm font-bold tracking-wider text-zinc-300">
                     {dayjs().locale('ko').month(getMonth! || 0).format('MMMM')}
                 </h2>
-                <div className="grid w-full grid-cols-7 gap-2">
+                <div className="grid w-full grid-cols-7 gap-2 ">
                     {/* 해당 달의 빈 타일 */}
                     {blankTiles.map((_, index) => (
                         <div

@@ -232,7 +232,8 @@ export const searchTodos = query({
     handler: async (ctx, args) => {
         const search = args.search.toLowerCase();
         const identity = await ctx.auth.getUserIdentity(); // 사용자 정보 가져오기
-        if (!identity) {
+
+        if (identity === null) {
             throw new ConvexError('사용자 정보가 없습니다.');
         }
         const user = await ctx.db

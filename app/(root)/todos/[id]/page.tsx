@@ -189,8 +189,8 @@ const TodoDetail = ({ params }: PageProps) => {
         <Animate index={1}>
             <section className="mt-10 w-full flex flex-col gap-4 overflow-y-auto no-scrollbar">
                 <div className='h-full' > {/**style={{ maxHeight: 'calc(100vh - 7rem)' }} */}
-                    <Card className="w-full "> {/* TODO 수정 max-w-2xl mx-auto*/}
-                        <CardHeader className='flex flex-row justify-between'>
+                    <Card className="w-full hover:ring-0"> {/* TODO 수정 max-w-2xl mx-auto*/}
+                        <CardHeader className='flex flex-row justify-between '>
                             <CardTitle>TODO 수정</CardTitle>
                             <div className='flex flex-row group'>
                                 <div className='text-16 font-bold'>작성일</div>

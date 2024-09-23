@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useState } from 'react'
-import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation';
 import { useDebounce } from '@/lib/useDebouncd';
 import { Input } from '../ui/input';
+import { Search } from 'lucide-react';
 
 const Searchbar = () => {
     const [search, setSearch] = useState("");
@@ -28,13 +28,8 @@ const Searchbar = () => {
                 onChange={(e) => setSearch(e.target.value)}
                 onLoad={() => setSearch('')}
             />
-            <Image
-                src="/icons/search.svg"
-                width={20}
-                height={20}
-                alt='search'
-                className='absolute top-2.5 left-4 max-sm:top-1.5 max-sm:left-2'
-            />
+            <Search width={20} height={20} className=' absolute top-2.5 left-4 max-sm:top-1.5 max-sm:left-2' />
+
         </div>
     )
 }

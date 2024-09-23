@@ -104,7 +104,7 @@ export default function CreateTodo() {
         <Animate index={1}>
             <section className="mt-10 w-full flex flex-col gap-4 overflow-y-auto no-scrollbar">
                 <div className='h-full' > {/** style={{ maxHeight: 'calc(100vh - 10rem)' }} */}
-                    <Card className="w-full">
+                    <Card className="w-full hover:ring-0">
                         <CardHeader>
                             <CardTitle>TODO 작성</CardTitle>
                         </CardHeader>

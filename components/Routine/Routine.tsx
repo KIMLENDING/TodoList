@@ -216,7 +216,7 @@ const Routine = () => {
                                 <div
                                     ref={provided.innerRef}
                                     {...provided.droppableProps}
-                                    className={cn("flex flex-wrap gap-8 w-full justify-start ", maxItemsPerRow === 1 ? 'py-4' : 'h-[480px]')}
+                                    className={cn("flex flex-wrap gap-4 w-full justify-start ", maxItemsPerRow === 1 ? 'py-4' : 'h-[480px] py-1')}
                                 >
                                     {chunk.map((Data: Routines, index2: number) => (
                                         <Draggable key={Data._id} draggableId={Data._id} index={index2} >
@@ -233,10 +233,11 @@ const Routine = () => {
                                                                 ref={provided.innerRef}
                                                                 {...provided.droppableProps}
                                                                 className={cn(
-                                                                    ' max-w-[380px]  flex flex-col gap-3 rounded-xl p-4 active:ring-1 active:ring-gray-300 bg-[#1F1F1F] transition-all group duration-700 hover:ring-1 hover:ring-gray-300',
+                                                                    ' max-w-[380px]  flex flex-col gap-3 rounded-xl p-4 active:ring-1 active:ring-yellow-200 bg-[#1F1F1F] transition-all group duration-700 hover:ring-1 hover:ring-yellow-200',
                                                                     snapshot.isDraggingOver ? 'shadow-lg shadow-gray-400' : '',
+
                                                                     'h-fit',
-                                                                    edit2 && selectedRsId === Data._id ? ' ring-1 ring-gray-300' : ' ring-0 ring-transparent' // 부모 수정 모드일때
+                                                                    edit2 && selectedRsId === Data._id ? ' ring-1 ring-yellow-200' : ' ring-0 ring-transparent' // 부모 수정 모드일때
                                                                 )}
                                                             >
                                                                 <EditRoutines
@@ -261,11 +262,11 @@ const Routine = () => {
                                                                                         onMouseEnter={() => { setSelectedRoutineId(routine._id) }} // 호버시 아이디 설정
                                                                                         onMouseLeave={() => { setSelectedRoutineId('') }} // 호버시 아이디 해제
                                                                                         className={cn(
-                                                                                            "rounded-lg bg-[#1F1F1F] p-4 hover:ring-1 hover:ring-gray-300  duration-300 transition-all ",
+                                                                                            "rounded-lg bg-[#1F1F1F] p-4 hover:ring-1 hover:ring-yellow-200  duration-300 transition-all ",
                                                                                             snapshot.isDragging
                                                                                                 ? 'bg-opacity-90 shadow-lg shadow-gray-400'
                                                                                                 : 'shadow shadow-[#272727]', // 드래그 중일때
-                                                                                            edit && selectedRoutineId === routine._id ? 'ring-1 ring-gray-300' : 'ring-0 ring-transparent' // 자식(루틴) 수정 모드일때
+                                                                                            edit && selectedRoutineId === routine._id ? 'ring-1 ring-yellow-200' : 'ring-0 ring-transparent' // 자식(루틴) 수정 모드일때
                                                                                         )}
                                                                                     >
                                                                                         <EditRoutine

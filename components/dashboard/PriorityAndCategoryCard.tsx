@@ -20,7 +20,7 @@ const PriorityAndCategoryCard = () => {
     const getTodosByCategory = useQuery(api.todos.getTodosByCategory, { priority: todoState.priority, category: todoState.category, userId: user?.id } || {});
     return (
         <div className='w-full grid grid-cols-1'>
-            <Card >
+            <Card className='hover:ring-0'>
                 <CardHeader>
                     <CardTitle>필터링</CardTitle>
                     <PriorityAndCategorySelector todoState={todoState} setTodoState={setTodoState} />
@@ -33,7 +33,7 @@ const PriorityAndCategoryCard = () => {
                                 getTodosByCategory.length === 0 ? (
                                     <div>자료가 없습니다</div>
                                 ) : (
-                                    <div className='flex flex-col w-full max-h-[500px] gap-2 min-w-0 overflow-y-scroll'>
+                                    <div className='flex flex-col w-full max-h-[500px] gap-2 min-w-0 overflow-y-scroll p-1'>
                                         {getTodosByCategory?.map(({ _id, todoTitle, category, priority, isCompleted }) => (
                                             <Card key={_id} >
                                                 <CardHeader>
