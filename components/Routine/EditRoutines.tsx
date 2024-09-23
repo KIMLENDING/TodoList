@@ -7,6 +7,7 @@ import { CardTitle } from '../ui/card'
 
 
 interface EditRoutinesProps {
+    hoverIdP: string
     edit2: boolean
     setEdit2: (value: boolean) => void
     title: string
@@ -18,6 +19,7 @@ interface EditRoutinesProps {
     Data: Routines
 }
 const EditRoutines = ({
+    hoverIdP,
     edit2, setEdit2, title, setTitle, description: description, setDescription: setDescription, selectedRsId, setSelectedRsId, Data
 }: EditRoutinesProps) => {
     const {
@@ -47,8 +49,9 @@ const EditRoutines = ({
                     <div className="flex justify-between items-center">
                         <CardTitle className="text-md font-semibold">
                             {Data.title}
+                            {hoverIdP}
                         </CardTitle>
-                        <div className={`duration-300 transition-all ${selectedRsId === Data.dndId ? 'hover:opacity-100 ' : 'opacity-0 pointer-events-none'}`}>
+                        <div className={`duration-300 transition-all ${hoverIdP === Data.dndId ? 'hover:opacity-100 ' : 'opacity-0 pointer-events-none'}`}>
                             <DropDownRoutines title={Data.title} dndId={Data.dndId} description={Data.description} handleDelet2={() => handleDelet2(Data.dndId)} setEdit2={setEdit2} setTitle={setTitle} setDescription={setDescription} setChoisePId={setSelectedRsId} />
                         </div>
                     </div>

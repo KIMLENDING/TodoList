@@ -63,6 +63,8 @@ const RoutineComponent = ({ routineData = [] }: RoutineComponentProps) => {
 
     const scrollRefs = useRef<{ [key: string]: HTMLDivElement | null }>({}); // 스크롤 할 요소 오브젝트 key값은 부모요소의 _id_
     const [scrollToId, setScrollToId] = useState<string | null>(null); // 스크롤 할 아이디 값은 부모요소의 _id_
+    const [hoverId, setHoverId] = useState(''); // 호버된 아이디
+    const [hoverIdP, setHoverIdP] = useState(''); // 호버된 아이디
 
     console.log('onDragEnd가 실행된 후 리랜더링 하여 chunkedMockData를 다시 생성하여 레이아웃을 고쳐줌',);
     const chunkedMockData = chunkArray(mockData, windowSize.width, maxItemsPerRow); // 최대 너비에 따라 배열을 나눔
@@ -219,8 +221,8 @@ const RoutineComponent = ({ routineData = [] }: RoutineComponentProps) => {
                                                             <div
                                                                 ref={provided.innerRef}
                                                                 {...provided.droppableProps}
-                                                                onMouseEnter={() => { setSelectedRsId(Data.dndId) }} // 호버시 아이디 설정
-                                                                onMouseLeave={() => { setSelectedRsId('') }} // 호버시 아이디 해제
+                                                                onMouseEnter={() => { setHoverIdP(Data.dndId) }} // 호버시 아이디 설정
+                                                                onMouseLeave={() => { setHoverIdP('') }} // 호버시 아이디 해제
                                                                 className={cn(
                                                                     ' max-w-[380px]  flex flex-col gap-3 rounded-xl p-4 active:ring-1 active:ring-yellow-200 bg-[#1F1F1F] transition-all group duration-700 hover:ring-1 hover:ring-yellow-200',
                                                                     snapshot.isDraggingOver ? 'shadow-lg shadow-gray-400' : '',
@@ -230,6 +232,7 @@ const RoutineComponent = ({ routineData = [] }: RoutineComponentProps) => {
                                                                 )}
                                                             >
                                                                 <EditRoutines
+                                                                    hoverIdP={hoverIdP}
                                                                     edit2={edit2} setEdit2={setEdit2} title={title}
                                                                     setTitle={setTitle} description={description}
                                                                     setDescription={setDescription} selectedRsId={selectedRsId}
@@ -248,8 +251,8 @@ const RoutineComponent = ({ routineData = [] }: RoutineComponentProps) => {
                                                                                         ref={provided.innerRef}
                                                                                         {...provided.draggableProps}
                                                                                         {...provided.dragHandleProps}
-                                                                                        onMouseEnter={() => { setSelectedRoutineId(routine.dndId) }} // 호버시 아이디 설정
-                                                                                        onMouseLeave={() => { setSelectedRoutineId('') }} // 호버시 아이디 해제
+                                                                                        onMouseEnter={() => { setHoverId(routine.dndId) }} // 호버시 아이디 설정
+                                                                                        onMouseLeave={() => { setHoverId('') }} // 호버시 아이디 해제
                                                                                         className={cn(
                                                                                             "rounded-lg bg-[#1F1F1F] p-4 hover:ring-1 hover:ring-yellow-200  duration-300 transition-all ",
                                                                                             snapshot.isDragging
@@ -259,6 +262,7 @@ const RoutineComponent = ({ routineData = [] }: RoutineComponentProps) => {
                                                                                         )}
                                                                                     >
                                                                                         <EditRoutine
+                                                                                            hoverId={hoverId}
                                                                                             edit={edit} setEdit={setEdit} title={title}
                                                                                             setTitle={setTitle} description={description}
                                                                                             setDescription={setDescription}

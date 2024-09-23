@@ -6,6 +6,7 @@ import DropDownRoutine from './DropDownRoutine'
 import useRoutineStore, { Routine } from '@/store/Routine'
 
 interface EditRoutineProps {
+    hoverId: string
     edit: boolean
     setEdit: (value: boolean) => void
     title: string
@@ -19,6 +20,7 @@ interface EditRoutineProps {
 }
 
 const EditRoutine = ({
+    hoverId,
     edit, setEdit, title, setTitle, description: description, setDescription: setDescription, selectedRoutineId, setSelectedRoutineId, routineItmes: routine
 }: EditRoutineProps) => {
     const {
@@ -63,7 +65,7 @@ const EditRoutine = ({
                                                                                                                 ${routine.completed ? 'scale-x-100' : 'scale-x-0'}`}
                                 ></span>
                             </span>
-                            <div className={`duration-300 transition-all ${selectedRoutineId === routine.dndId ? 'group-hover:opacity-100 ' : 'opacity-0 pointer-events-none'}`}>
+                            <div className={`duration-300 transition-all ${hoverId === routine.dndId ? 'group-hover:opacity-100 ' : 'opacity-0 pointer-events-none'}`}>
                                 <DropDownRoutine title={routine.title} dndId={routine.dndId} description={routine.description} handleDelet={() => handleDelet(routine.dndId)} setEdit={setEdit} setTitle={setTitle} setDescription={setDescription} setChoiseRoutine={setSelectedRoutineId} />
                             </div>
                         </div>
