@@ -11,51 +11,39 @@ import AddRoutines from './AddRoutines';
 import EditRoutines from './EditRoutines';
 import EditRoutine from './EditRoutine';
 import AddRoutine from './AddRoutine';
-import useRoutineStore from '../../store/Routine';
+import useRoutineStore, { Routine, Routines } from '../../store/Routine';
 import { useInView } from 'react-intersection-observer';
 
-export interface Routine {
-    _id: string; // 아이디 - 고유값
-    indexDB: number; // 순서 DB에서 사용할 인덴스로 데이터를 가져올 때 순서를 정렬해서 가져오기 위함
-    title: string; //
-    discription: string; // 설명
-    completed: boolean;
-}
-export interface Routines {
-    _id: string; //아이디 - 고유값
-    indexDB: number; // 순서
-    title: string; // 시간 - 이게 제목임
-    discription: string; // 설명
-    type: string[]; // 아침, 점심, 저녁 중복 가능 - 기본값 아침
-    routine?: Routine[]; // 할일
-}
-const initialMockData: Routines[] = Array.from({ length: 10 }, (_, index) => ({
-    _id: `mock-${index}`,
-    indexDB: index,
-    title: `언제 ${index} - ${['아침', '점심', '저녁'][Math.floor(Math.random() * 3)]}`, // Random time of day
-    discription: `내용 ${index + 1}`,
-    type: ['아침', '점심', '저녁'].filter(() => Math.random() > 0.5) || ['아침'], // Randomly include times
-    routine: Array.from({ length: Math.floor(Math.random() * 4) + 1 }, (_, routineIndex) => ({
-        _id: `routine-${index}-${routineIndex}`,
-        indexDB: routineIndex,
-        title: `언제 ${index} 할일 ${routineIndex} `,
-        discription: `언제 ${index} 내용 테스트 ${routineIndex} `,
-        completed: Math.random() > 0.5 // Randomly mark some as completed
-    }))
-}));
 
+// const initialMockData: Routines[] = Array.from({ length: 10 }, (_, index) => ({
+//     _id: `mock-${index}`,
+//     indexDB: index,
+//     title: `언제 ${index} - ${['아침', '점심', '저녁'][Math.floor(Math.random() * 3)]}`, // Random time of day
+//     description: `내용 ${index + 1}`,
+//     type: ['아침', '점심', '저녁'].filter(() => Math.random() > 0.5) || ['아침'], // Randomly include times
+//     routine: Array.from({ length: Math.floor(Math.random() * 4) + 1 }, (_, routineIndex) => ({
+//         _id: `routine-${index}-${routineIndex}`,
+//         indexDB: routineIndex,
+//         title: `언제 ${index} 할일 ${routineIndex} `,
+//         description: `언제 ${index} 내용 테스트 ${routineIndex} `,
+//         completed: Math.random() > 0.5 // Randomly mark some as completed
+//     }))
+// }));
 
-const Routine = () => {
+interface RoutineComponentProps {
+    routineData: any[]
+}
+const RoutineComponent = ({ routineData = [] }: RoutineComponentProps) => {
     // const [mockData, setMockData] = useState<Routines[]>(mockData2);
     const { ref, inView } = useInView({
         threshold: 0.5,
         triggerOnce: true,
     })
-    const { mockData, setMockData, } = useRoutineStore();
+    const { mockData, setMockData } = useRoutineStore();
     useEffect(() => {
-        setMockData(initialMockData);
+        setMockData(routineData);
     }, []);
-
+    console.log('RoutineData', routineData);
     const [windowSize, setWindowSize] = useState({
         width: 0,
         height: 0,
@@ -72,10 +60,10 @@ const Routine = () => {
     const [addRoutine, setAddRoutine] = useState(false);// 할일 추가 모드
 
     const [title, setTitle] = useState(''); // 제목
-    const [discription, setDiscription] = useState(''); // 설명
+    const [description, setDescription] = useState(''); // 설명
 
-    const scrollRefs = useRef<{ [key: string]: HTMLDivElement | null }>({}); // 스크롤 할 요소 오브젝트 key값은 부모요소의 _id
-    const [scrollToId, setScrollToId] = useState<string | null>(null); // 스크롤 할 아이디 값은 부모요소의 _id
+    const scrollRefs = useRef<{ [key: string]: HTMLDivElement | null }>({}); // 스크롤 할 요소 오브젝트 key값은 부모요소의 _id_
+    const [scrollToId, setScrollToId] = useState<string | null>(null); // 스크롤 할 아이디 값은 부모요소의 _id_
 
     console.log('onDragEnd가 실행된 후 리랜더링 하여 chunkedMockData를 다시 생성하여 레이아웃을 고쳐줌',);
     const chunkedMockData = chunkArray(mockData, windowSize.width, maxItemsPerRow); // 최대 너비에 따라 배열을 나눔
@@ -167,25 +155,25 @@ const Routine = () => {
             setMockData(flattenedMockData); // 업데이트
         } else if (type === 'ITEM') {
             // 아이템 이동 로직 - 자식 컴포넌트 (루틴)
-            //  자식 Droppable의 아이디는 routine-[Routins_id] 형태
-            const sourceKey = source.droppableId; // 이전 자식 Droppable의 routine-[Routins_id]
-            const destinationKey = destination.droppableId; // 이후 자식 Droppable의 routine-[Routins_id]
+            //  자식 Droppable의 아이디는 routine-[Routins_id_] 형태
+            const sourceKey = source.droppableId; // 이전 자식 Droppable의 routine-[Routins_id_]
+            const destinationKey = destination.droppableId; // 이후 자식 Droppable의 routine-[Routins_id_]
 
             const _items = JSON.parse(JSON.stringify(mockData)) as typeof mockData;
-            const sourceColumn = _items.find((item) => item._id === sourceKey.replace('routine-', '')); // 이전 부모 요소(Routins)의 _id로 routine이 존재하는 Routins 객체 찾기
-            const destinationColumn = _items.find((item) => item._id === destinationKey.replace('routine-', '')); // 이후 부모 요소(Routins)의 _id로 routine이 이동 할 Routins 객체 찾기
+            const sourceColumn = _items.find((item) => item.dndId === sourceKey.replace('routine-', '')); // 이전 부모 요소(Routins)의 _id_로 routine이 존재하는 Routins 객체 찾기
+            const destinationColumn = _items.find((item) => item.dndId === destinationKey.replace('routine-', '')); // 이후 부모 요소(Routins)의 _id_로 routine이 이동 할 Routins 객체 찾기
 
             if (sourceColumn && destinationColumn) {
-                const sourceRoutine = sourceColumn.routine?.splice(source.index, 1); // 이전 부모 요소에서 아이템 제거
-                destinationColumn.routine?.splice(destination.index, 0, ...sourceRoutine!); // 이후 부모 요소에서 아이템 추가
+                const sourceRoutine = sourceColumn.routineItmes?.splice(source.index, 1); // 이전 부모 요소에서 아이템 제거
+                destinationColumn.routineItmes?.splice(destination.index, 0, ...sourceRoutine!); // 이후 부모 요소에서 아이템 추가
 
-                if (sourceColumn.routine) {     // 이전 부모 요소의 indexDB 재설정
-                    sourceColumn.routine.forEach((routine, index) => {
+                if (sourceColumn.routineItmes) {     // 이전 부모 요소의 indexDB 재설정
+                    sourceColumn.routineItmes.forEach((routine, index) => {
                         routine.indexDB = index;
                     });
                 }
-                if (destinationColumn.routine) {    // 이후 부모 요소의 indexDB 재설정
-                    destinationColumn.routine.forEach((routine, index) => {
+                if (destinationColumn.routineItmes) {    // 이후 부모 요소의 indexDB 재설정
+                    destinationColumn.routineItmes.forEach((routine, index) => {
                         routine.indexDB = index;
                     });
                 }
@@ -205,8 +193,8 @@ const Routine = () => {
                     { 'animate-revealSm': inView },
                 )} ref={ref}>
                     <AddRoutines addRoutine={addRoutine} setAddRoutine={setAddRoutine} edit2={edit2}
-                        setEdit2={setEdit2} title={title} setTitle={setTitle} discription={discription}
-                        setDiscription={setDiscription}
+                        setEdit2={setEdit2} title={title} setTitle={setTitle} description={description}
+                        setDescription={setDescription}
                     />
                 </div>
                 <div className='mx-auto'>
@@ -219,7 +207,7 @@ const Routine = () => {
                                     className={cn("flex flex-wrap gap-4 w-full justify-start ", maxItemsPerRow === 1 ? 'py-4' : 'h-[480px] py-1')}
                                 >
                                     {chunk.map((Data: Routines, index2: number) => (
-                                        <Draggable key={Data._id} draggableId={Data._id} index={index2} >
+                                        <Draggable key={Data.dndId} draggableId={Data.dndId} index={index2} >
                                             {(provided) => (
                                                 <div
                                                     ref={provided.innerRef}
@@ -227,7 +215,7 @@ const Routine = () => {
                                                     {...provided.dragHandleProps}
                                                     className="w-[380px]"
                                                 >
-                                                    <Droppable droppableId={`routine-${Data._id}`} type="ITEM">
+                                                    <Droppable droppableId={`routine-${Data.dndId}`} type="ITEM">
                                                         {(provided, snapshot) => (
                                                             <div
                                                                 ref={provided.innerRef}
@@ -237,46 +225,46 @@ const Routine = () => {
                                                                     snapshot.isDraggingOver ? 'shadow-lg shadow-gray-400' : '',
 
                                                                     'h-fit',
-                                                                    edit2 && selectedRsId === Data._id ? ' ring-1 ring-yellow-200' : ' ring-0 ring-transparent' // 부모 수정 모드일때
+                                                                    edit2 && selectedRsId === Data.dndId ? ' ring-1 ring-yellow-200' : ' ring-0 ring-transparent' // 부모 수정 모드일때
                                                                 )}
                                                             >
                                                                 <EditRoutines
                                                                     edit2={edit2} setEdit2={setEdit2} title={title}
-                                                                    setTitle={setTitle} discription={discription}
-                                                                    setDiscription={setDiscription} selectedRsId={selectedRsId}
+                                                                    setTitle={setTitle} description={description}
+                                                                    setDescription={setDescription} selectedRsId={selectedRsId}
                                                                     setSelectedRsId={setSelectedRsId} Data={Data}
                                                                 />
 
                                                                 <div
-                                                                    ref={(el) => { scrollRefs.current[Data._id] = el }}
+                                                                    ref={(el) => { scrollRefs.current[Data.dndId] = el }}
                                                                     className='flex flex-col gap-3 h-full max-h-[285px] overflow-y-auto p-1 '
                                                                 > {/**자식 리스트 */}
                                                                     <div className='flex flex-col gap-3  h-full '>
-                                                                        {Data.routine?.map((routine: Routine, index: number) => (
-                                                                            <Draggable key={routine._id} draggableId={routine._id} index={index} >
+                                                                        {Data.routineItmes?.map((routine: Routine, index: number) => (
+                                                                            <Draggable key={routine.dndId} draggableId={routine.dndId} index={index} >
                                                                                 {(provided, snapshot) => (
                                                                                     <div
                                                                                         ref={provided.innerRef}
                                                                                         {...provided.draggableProps}
                                                                                         {...provided.dragHandleProps}
-                                                                                        onMouseEnter={() => { setSelectedRoutineId(routine._id) }} // 호버시 아이디 설정
+                                                                                        onMouseEnter={() => { setSelectedRoutineId(routine.dndId) }} // 호버시 아이디 설정
                                                                                         onMouseLeave={() => { setSelectedRoutineId('') }} // 호버시 아이디 해제
                                                                                         className={cn(
                                                                                             "rounded-lg bg-[#1F1F1F] p-4 hover:ring-1 hover:ring-yellow-200  duration-300 transition-all ",
                                                                                             snapshot.isDragging
                                                                                                 ? 'bg-opacity-90 shadow-lg shadow-gray-400'
                                                                                                 : 'shadow shadow-[#272727]', // 드래그 중일때
-                                                                                            edit && selectedRoutineId === routine._id ? 'ring-1 ring-yellow-200' : 'ring-0 ring-transparent' // 자식(루틴) 수정 모드일때
+                                                                                            edit && selectedRoutineId === routine.dndId ? 'ring-1 ring-yellow-200' : 'ring-0 ring-transparent' // 자식(루틴) 수정 모드일때
                                                                                         )}
                                                                                     >
                                                                                         <EditRoutine
                                                                                             edit={edit} setEdit={setEdit} title={title}
-                                                                                            setTitle={setTitle} discription={discription}
-                                                                                            setDiscription={setDiscription}
+                                                                                            setTitle={setTitle} description={description}
+                                                                                            setDescription={setDescription}
                                                                                             selectedRoutineId={selectedRoutineId}
                                                                                             setSelectedRoutineId={setSelectedRoutineId}
 
-                                                                                            routine={routine}
+                                                                                            routineItmes={routine}
                                                                                         />
                                                                                     </div>
                                                                                 )}
@@ -287,7 +275,7 @@ const Routine = () => {
                                                                 </div>
                                                                 <AddRoutine
                                                                     addRoutine={addRoutine} setAddRoutine={setAddRoutine} title={title}
-                                                                    setTitle={setTitle} discription={discription} setDiscription={setDiscription}
+                                                                    setTitle={setTitle} description={description} setDescription={setDescription}
                                                                     selectedRsId={selectedRsId} setSelectedRsId={setSelectedRsId}
                                                                     Data={Data}
                                                                     setScrollToId={setScrollToId}
@@ -310,4 +298,4 @@ const Routine = () => {
     )
 }
 
-export default Routine;
+export default RoutineComponent;

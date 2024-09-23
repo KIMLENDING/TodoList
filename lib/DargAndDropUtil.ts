@@ -35,7 +35,10 @@ export function chunkArray(array: any[], maxWidth = 1700, maxItemsPerRow = 5) {
     const tempArray: any = [];
     let currentRow = [];
     let currentWidth = 0;
-    if (array.length === 0) {
+    if (!array) {
+        return tempArray;
+    }
+    if (!array.length) {
         return tempArray;
     }
 

@@ -33,14 +33,33 @@ export default defineSchema({
         .searchIndex('search_title', { searchField: 'todoTitle' }) // 검색 인덱스 todoTitle 필드
         .searchIndex('search_Description', { searchField: 'todoDescription' }) // 검색 인덱스 todoDescription 필드
         .searchIndex('search_Completed', { searchField: 'isCompleted' }) // 검색 인덱스 isCompleted 필드
-
     ,
+    routines: defineTable({
+        user: v.id('users'),    // 유저 아이디
+        authorId: v.string(), // users 테이블의 clerkId
+        dndId: v.string(), // 클라이언트에서 dnd를 위한 아이디
+        indexDB: v.number(),
+        title: v.string(),
+        description: v.string(),
+        type: v.array(v.string()),
+        routineItmes: v.optional(v.array(v.object({
+            dndId: v.string(),
+            indexDB: v.number(),
+            title: v.string(),
+            description: v.string(),
+            completed: v.boolean(),
+        }))),
+    }),
+
+
+
     users: defineTable({
         name: v.string(),
         email: v.string(),
         imageUrl: v.string(),
         clerkId: v.string(),
-    }),
+    }).index("by_clerkId", ["clerkId"]),
+
 
 },
     {

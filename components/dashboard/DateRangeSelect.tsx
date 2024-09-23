@@ -12,7 +12,7 @@ import Link from 'next/link';
 import { Badge } from '../ui/badge';
 import TodoControls from '../TodoCompletion';
 
-
+// 날짜 범위 선택으로 일정을 조회하는 컴포넌트
 const DateRangeSelect = () => {
     const [date, setDate] = useState<DateRange | undefined>({
         from: undefined,

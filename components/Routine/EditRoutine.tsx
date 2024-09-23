@@ -1,25 +1,25 @@
 import React from 'react'
-import { Routine } from './Routine'
+
 import { Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import DropDownRoutine from './DropDownRoutine'
-import useRoutineStore from '@/store/Routine'
+import useRoutineStore, { Routine } from '@/store/Routine'
 
 interface EditRoutineProps {
     edit: boolean
     setEdit: (value: boolean) => void
     title: string
     setTitle: (value: string) => void
-    discription: string
-    setDiscription: (value: string) => void
+    description: string
+    setDescription: (value: string) => void
     selectedRoutineId: string
     setSelectedRoutineId: (value: string) => void
 
-    routine: Routine
+    routineItmes: Routine
 }
 
 const EditRoutine = ({
-    edit, setEdit, title, setTitle, discription, setDiscription, selectedRoutineId, setSelectedRoutineId, routine
+    edit, setEdit, title, setTitle, description: description, setDescription: setDescription, selectedRoutineId, setSelectedRoutineId, routineItmes: routine
 }: EditRoutineProps) => {
     const {
         handleEdit,
@@ -28,27 +28,28 @@ const EditRoutine = ({
     } = useRoutineStore();
     return (
         <section>
-            {edit && selectedRoutineId === routine._id ? (<>{/*자식(루틴) 수정 모드 */}
+            {edit && selectedRoutineId === routine.dndId ? (<>{/*자식(루틴) 수정 모드 */}
                 <div className='flex flex-row gap-4 items-center'>
-                    <button onClick={() => handleCompleted(routine._id)} className={cn("duration-300 transition-all p-1 text-xs font-semibold text-gray-900 rounded-full border-2 w-fit h-fit", routine.completed ? 'bg-yellow-500' : 'bg-opacity-0')}>
+                    <button onClick={() => handleCompleted(routine.dndId)} className={cn("duration-300 transition-all p-1 text-xs font-semibold text-gray-900 rounded-full border-2 w-fit h-fit", routine.completed ? 'bg-yellow-500' : 'bg-opacity-0')}>
                         {routine.completed ? <Check size={16} /> : <><Check size={16} className='opacity-0' /></>}
                     </button>
                     <div className='flex flex-col w-full gap-1'>
                         <div className="flex justify-between items-center">
                             <input type="text" value={title} placeholder='제목' onChange={(e) => { setTitle(e.target.value) }} className="text-sm font-semibold border-white border-b-2 bg-transparent" />
                             <button onClick={() => {
-                                handleEdit(routine._id, title, discription);
+                                handleEdit(routine.dndId, title, description);
                                 setEdit(false);
                                 setTitle('');
-                                setDiscription('');
+                                setDescription('');
+                                setSelectedRoutineId('');
                             }}><Check /></button>
                         </div>
-                        <input type="text" value={discription} placeholder='부제목' onChange={(e) => { setDiscription(e.target.value) }} className="text-xs text-gray-500 border-white border-b-2 bg-transparent" />
+                        <input type="text" value={description} placeholder='부제목' onChange={(e) => { setDescription(e.target.value) }} className="text-xs text-gray-500 border-white border-b-2 bg-transparent" />
                     </div>
                 </div>
             </>) : (<>{/*자식 수정 모드 아닐때 */}
                 <div className='flex flex-row gap-4 items-center group '>
-                    <button onClick={() => handleCompleted(routine._id)} className={cn("duration-300 transition-all p-1 text-xs font-semibold text-gray-900 rounded-full border-2 w-fit h-fit", routine.completed ? 'bg-yellow-500' : 'bg-opacity-0')}>
+                    <button onClick={() => handleCompleted(routine.dndId)} className={cn("duration-300 transition-all p-1 text-xs font-semibold text-gray-900 rounded-full border-2 w-fit h-fit", routine.completed ? 'bg-yellow-500' : 'bg-opacity-0')}>
                         {routine.completed ? <Check size={16} /> : <><Check size={16} className='opacity-0' /></>}
                     </button>
                     <div className='flex flex-col w-full gap-1 '>
@@ -62,12 +63,12 @@ const EditRoutine = ({
                                                                                                                 ${routine.completed ? 'scale-x-100' : 'scale-x-0'}`}
                                 ></span>
                             </span>
-                            <div className={`duration-300 transition-all ${selectedRoutineId === routine._id ? 'group-hover:opacity-100' : 'opacity-0'}`}>
-                                <DropDownRoutine title={routine.title} _id={routine._id} discription={routine.discription} handleDelet={() => handleDelet(routine._id)} setEdit={setEdit} setTitle={setTitle} setDiscription={setDiscription} setChoiseRoutine={setSelectedRoutineId} />
+                            <div className={`duration-300 transition-all ${selectedRoutineId === routine.dndId ? 'group-hover:opacity-100' : 'opacity-0'}`}>
+                                <DropDownRoutine title={routine.title} dndId={routine.dndId} description={routine.description} handleDelet={() => handleDelet(routine.dndId)} setEdit={setEdit} setTitle={setTitle} setDescription={setDescription} setChoiseRoutine={setSelectedRoutineId} />
                             </div>
                         </div>
                         <span className="text-xs text-gray-500 ">
-                            {routine.discription}
+                            {routine.description}
                         </span>
                     </div>
                 </div>
