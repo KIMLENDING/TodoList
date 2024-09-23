@@ -219,6 +219,8 @@ const RoutineComponent = ({ routineData = [] }: RoutineComponentProps) => {
                                                             <div
                                                                 ref={provided.innerRef}
                                                                 {...provided.droppableProps}
+                                                                onMouseEnter={() => { setSelectedRsId(Data.dndId) }} // 호버시 아이디 설정
+                                                                onMouseLeave={() => { setSelectedRsId('') }} // 호버시 아이디 해제
                                                                 className={cn(
                                                                     ' max-w-[380px]  flex flex-col gap-3 rounded-xl p-4 active:ring-1 active:ring-yellow-200 bg-[#1F1F1F] transition-all group duration-700 hover:ring-1 hover:ring-yellow-200',
                                                                     snapshot.isDraggingOver ? 'shadow-lg shadow-gray-400' : '',

@@ -24,7 +24,7 @@ interface DropDownComponentProps {
 
 const DropDownRoutine = (props: DropDownComponentProps) => {
     return (
-        <section>
+        <section className='flex'>
             <DropdownMenu >{/** 자식 컴포넌트 옵션 */}
                 <DropdownMenuTrigger> <Ellipsis className='text-yellow-400' /> </DropdownMenuTrigger>
                 <DropdownMenuContent className='bg-[#1F1F1F] text-gray-100'>

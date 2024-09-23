@@ -63,7 +63,7 @@ const EditRoutine = ({
                                                                                                                 ${routine.completed ? 'scale-x-100' : 'scale-x-0'}`}
                                 ></span>
                             </span>
-                            <div className={`duration-300 transition-all ${selectedRoutineId === routine.dndId ? 'group-hover:opacity-100' : 'opacity-0'}`}>
+                            <div className={`duration-300 transition-all ${selectedRoutineId === routine.dndId ? 'group-hover:opacity-100 ' : 'opacity-0 pointer-events-none'}`}>
                                 <DropDownRoutine title={routine.title} dndId={routine.dndId} description={routine.description} handleDelet={() => handleDelet(routine.dndId)} setEdit={setEdit} setTitle={setTitle} setDescription={setDescription} setChoiseRoutine={setSelectedRoutineId} />
                             </div>
                         </div>

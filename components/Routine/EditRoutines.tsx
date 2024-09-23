@@ -48,7 +48,7 @@ const EditRoutines = ({
                         <CardTitle className="text-md font-semibold">
                             {Data.title}
                         </CardTitle>
-                        <div className='opacity-0 group-hover:opacity-100 duration-300 transition-all'>
+                        <div className={`duration-300 transition-all ${selectedRsId === Data.dndId ? 'hover:opacity-100 ' : 'opacity-0 pointer-events-none'}`}>
                             <DropDownRoutines title={Data.title} dndId={Data.dndId} description={Data.description} handleDelet2={() => handleDelet2(Data.dndId)} setEdit2={setEdit2} setTitle={setTitle} setDescription={setDescription} setChoisePId={setSelectedRsId} />
                         </div>
                     </div>
