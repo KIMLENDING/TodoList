@@ -21,6 +21,8 @@ const RoutinePage = () => {
                 } catch (error) {
                     console.error("Error updating routines:", error);
                 }
+            } else {
+                await setRoutines({ mockData: [] });
             }
         };
         updateRoutines();

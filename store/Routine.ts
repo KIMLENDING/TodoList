@@ -72,17 +72,19 @@ const useRoutineStore = create<RoutineStore>((set) => ({
 
     handleDelet: (routineId) => set((state) => {
         const newMockData = JSON.parse(JSON.stringify(state.mockData));
+        console.log(newMockData.length);
         for (let i = 0; i < newMockData.length; i++) {
-            if (newMockData[i].routine) {
-                newMockData[i].routine = newMockData[i].routineItmes.filter((r: Routine) => r.dndId !== routineId);
-                return { mockData: newMockData };
+            if (newMockData[i].routineItmes) {
+                newMockData[i].routineItmes = newMockData[i].routineItmes.filter((r: Routine) => r.dndId !== routineId);
             }
         }
-        return state;
+        return { mockData: newMockData };
     }),
 
     handleDelet2: (mockId) => set((state) => {
+        console.log(mockId);
         const newMockData = state.mockData.filter((r: Routines) => r.dndId !== mockId);
+        console.log(newMockData);
         return { mockData: newMockData };
     }),
 

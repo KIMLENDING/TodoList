@@ -10,8 +10,7 @@ import YearMonthSelector from '@/components/YearMonthSelector';
 import dayjs from 'dayjs'
 
 import Calendar from '@/components/Calendar';
-import Tag from '@/components/Tag';
-import { format } from 'date-fns';
+
 const CalendarPage = () => {
     // 날짜 선택 + 유저 정보 + 해당 날짜의 할 일 정보
     const [date, setDate] = useState<DateRange | undefined>({
@@ -44,16 +43,16 @@ const CalendarPage = () => {
             [`${year}-12`]: []
         };
 
-        return todos.reduce((acc: { [month: string]: any[] }, todo: any) => {
-            const creationDate = new Date(todo._creationTime).toLocaleDateString('ko-KR');
-            const monthonly = creationDate.split('.')[1].trim().padStart(2, '0'); // 월 추출 및 두 자릿수로 변환
+        return todos.reduce((months: { [month: string]: any[] }, todo: any) => {
+            const creationDate = new Date(todo._creationTime).toLocaleDateString('ko-KR'); // 생성 날짜 추출
+            const monthonly = creationDate.split('.')[1].trim().padStart(2, '0'); // 월 추출 및 두 자릿수로 변환 (ex. 4 -> 04)
             const year_month = year + '-' + monthonly;
-            if (!acc[year_month]) {
-                acc[year_month] = [];
+            if (!months[year_month]) {
+                months[year_month] = [];
             }
             // 해당 월에 할 일 추가
-            acc[year_month].push(todo);
-            return acc;
+            months[year_month].push(todo);
+            return months;
         }, months); // 빈 월 배열이 포함된 객체를 초기값으로 설정
     };
 

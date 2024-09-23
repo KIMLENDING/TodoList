@@ -25,7 +25,7 @@ export const getUserRoutines = query({
 // 루틴 덮어쓰기 {mockData}
 export const setRoutines = mutation({
     args: {
-        mockData: v.array(v.object({
+        mockData: v.optional(v.array(v.object({
             dndId: v.string(),
             indexDB: v.number(),
             title: v.string(),
@@ -38,7 +38,7 @@ export const setRoutines = mutation({
                 description: v.string(),
                 completed: v.boolean(),
             })),
-        })),
+        }))),
     },
     handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity(); // 사용자 정보 가져오기
@@ -60,6 +60,9 @@ export const setRoutines = mutation({
         routines.map(async (routine) => { // 루틴 삭제
             await ctx.db.delete(routine._id);
         });
+        if (!args.mockData) {
+            return;
+        }
         for (const routine of args.mockData) {
             await ctx.db.insert("routines", {
                 user: user[0]._id,

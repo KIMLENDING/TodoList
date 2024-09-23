@@ -43,7 +43,6 @@ const RoutineComponent = ({ routineData = [] }: RoutineComponentProps) => {
     useEffect(() => {
         setMockData(routineData);
     }, []);
-    console.log('RoutineData', routineData);
     const [windowSize, setWindowSize] = useState({
         width: 0,
         height: 0,
