@@ -124,7 +124,7 @@ const TodoCard = ({ todo, index }: any) => {
                             </div>}
                         </div>
                         <div className='flex justify-between items-center gap-2'>
-                            <Progress value={convertToPercentage(todo.isCompleted, todo.dueDate?.from, todo.dueDate?.to)} />
+                            <Progress title={todo.isCompleted} value={convertToPercentage(todo.isCompleted, todo.dueDate?.from, todo.dueDate?.to)} />
                             {convertToPercentage(todo.isCompleted, todo.dueDate?.from, todo.dueDate?.to)}%
                         </div>
                     </CardContent>
