@@ -92,7 +92,7 @@ body {
     @apply sticky right-0 top-0 flex w-[310px] flex-col overflow-y-hidden border-none bg-[#616161] px-[30px] pt-8 max-xl:hidden;
   }
   .left_sidebar {
-    @apply sticky left-0 top-0 flex w-fit flex-col  justify-between  border-none  bg-[#616161] pt-8 text-white-1 max-md:hidden lg:w-[270px] lg:pl-8;
+    @apply sticky left-0 top-0 flex w-fit flex-col  justify-between  border-none  bg-[#616161] pt-8 text-black-1 font-extrabold text-[18px] max-md:hidden lg:w-[270px] lg:pl-8;
   }
   .flex-center {
     @apply flex items-center justify-center;

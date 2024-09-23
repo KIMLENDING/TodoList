@@ -30,15 +30,16 @@ const LeftSidebar = () => {
                     <div className='border-2 rounded-md'>
                         <Image src='/icons/logo.svg' alt='menu icon' width={34} height={34} />
                     </div>
-                    <h1 className='pt-2 text-[28px] font-extrabold text-white-1 max-lg:hidden'>TODO</h1>
+                    <h1 className='pt-2 text-[28px] font-extrabold  max-lg:hidden'>TODO</h1>
                 </Link>
-                {sidebarLinks.map(({ route, label, imgURL }) => {
+                {sidebarLinks.map(({ route, label, imgURL, component }) => {
                     const isActive = pathname === route || pathname.startsWith(`${route}/`);
                     return <Link href={route} key={label}
                         className={cn('flex gap-3 items-center py-4 max-lg:px-4 justify-center lg:justify-start', {
                             'bg-nav-focus border-r-4 border-blue-300': isActive
                         })}>
-                        <Image src={imgURL} alt={label} width={24} height={24} />
+                        {/* <Image src={imgURL} alt={label} width={24} height={24} /> */}
+                        {React.createElement(component)}
                         <p>{label}</p>
                     </Link>
                 })}
