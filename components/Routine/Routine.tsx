@@ -190,7 +190,7 @@ const RoutineComponent = ({ routineData = [] }: RoutineComponentProps) => {
         <div className='flex flex-col mx-auto mt-10'>
             <DragDropContext onDragEnd={onDragEnd}>
                 <div className={cn(
-                    'reveal sticky top-5 z-10 mx-auto rounded-full pb-8 text-zinc-500  ',
+                    'reveal sticky top-5 z-10 mx-auto rounded-full pb-8   ',
                     { 'animate-revealSm': inView },
                 )} ref={ref}>
                     <AddRoutines addRoutine={addRoutine} setAddRoutine={setAddRoutine} edit2={edit2}
@@ -224,7 +224,7 @@ const RoutineComponent = ({ routineData = [] }: RoutineComponentProps) => {
                                                                 onMouseEnter={() => { setHoverIdP(Data.dndId) }} // 호버시 아이디 설정
                                                                 onMouseLeave={() => { setHoverIdP('') }} // 호버시 아이디 해제
                                                                 className={cn(
-                                                                    ' max-w-[380px]  flex flex-col gap-3 rounded-xl p-4 active:ring-1 active:ring-yellow-200 bg-[#1F1F1F] transition-all group duration-700 hover:ring-1 hover:ring-yellow-200',
+                                                                    ' max-w-[380px]  flex flex-col gap-3 rounded-xl p-4 active:ring-1 active:ring-yellow-200 bg-[#1F1F1F] group  hover:ring-1 hover:ring-yellow-200',
                                                                     snapshot.isDraggingOver ? 'shadow-lg shadow-gray-400' : '',
 
                                                                     'h-fit',
@@ -254,7 +254,7 @@ const RoutineComponent = ({ routineData = [] }: RoutineComponentProps) => {
                                                                                         onMouseEnter={() => { setHoverId(routine.dndId) }} // 호버시 아이디 설정
                                                                                         onMouseLeave={() => { setHoverId('') }} // 호버시 아이디 해제
                                                                                         className={cn(
-                                                                                            "rounded-lg bg-[#1F1F1F] p-4 hover:ring-1 hover:ring-yellow-200  duration-300 transition-all ",
+                                                                                            "rounded-lg bg-[#1F1F1F] p-4 hover:ring-1 hover:ring-yellow-200   ",
                                                                                             snapshot.isDragging
                                                                                                 ? 'bg-opacity-90 shadow-lg shadow-gray-400'
                                                                                                 : 'shadow shadow-[#272727]', // 드래그 중일때
