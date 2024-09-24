@@ -66,7 +66,7 @@ const RoutineComponent = ({ routineData = [] }: RoutineComponentProps) => {
     const [hoverId, setHoverId] = useState(''); // 호버된 아이디
     const [hoverIdP, setHoverIdP] = useState(''); // 호버된 아이디
 
-    console.log('onDragEnd가 실행된 후 리랜더링 하여 chunkedMockData를 다시 생성하여 레이아웃을 고쳐줌',);
+    // console.log('onDragEnd가 실행된 후 리랜더링 하여 chunkedMockData를 다시 생성하여 레이아웃을 고쳐줌',);
     const chunkedMockData = chunkArray(mockData, windowSize.width, maxItemsPerRow); // 최대 너비에 따라 배열을 나눔
 
     useLayoutEffect(() => { // dom이 로드되기 전에 실행
@@ -139,7 +139,6 @@ const RoutineComponent = ({ routineData = [] }: RoutineComponentProps) => {
             // 그룹 이동 로직 - 부모 컴포넌트 (루틴s)
             // 행간 이동을 위한 인덱스
             // row-0, row-1, row-2, row-3, row-4, row-5, row-6, row-7, row-8, row-9 ...
-            console.log(source.droppableId,);
             const sourceChunkIndex = parseInt(source.droppableId.split('-')[1]); // 이전 행 인덱스
             const destChunkIndex = parseInt(destination.droppableId.split('-')[1]); // 이후 행 인덱스
 
@@ -198,7 +197,7 @@ const RoutineComponent = ({ routineData = [] }: RoutineComponentProps) => {
                         setDescription={setDescription}
                     />
                 </div>
-                <div className='mx-auto'>
+                <div className='mx-auto text-white-1'>
                     {chunkedMockData.map((chunk: Routines[], chunkIndex: number) => (
                         <Droppable droppableId={`row-${chunkIndex}`} direction='horizontal' key={chunkIndex} type="GROUP">
                             {(provided) => (
