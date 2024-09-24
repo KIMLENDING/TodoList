@@ -14,15 +14,17 @@ import { useMutation } from 'convex/react';
 const LeftSidebar = () => {
     const { isSignedIn, user } = useUser();
     const updateTodoState = useMutation(api.todos.updateCompleted);
+    const resetRoutines = useMutation(api.routines.resetRoutines);
+    const pathname = usePathname();
+    const router = useRouter();
+    const { signOut } = useClerk();
     useEffect(() => {
         if (isSignedIn && user) {
             // 사용자가 로그인 되었을 때 실행할 코드
             updateTodoState({ userId: user.id }); // 완료된 Todo 항목 업데이트
+            resetRoutines({ routeId: pathname }); // 루틴 완료 여부 초기화
         }
     }, [isSignedIn, user]);
-    const pathname = usePathname();
-    const router = useRouter();
-    const { signOut } = useClerk();
     return (
         <section className='left_sidebar'>
             <nav>

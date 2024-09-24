@@ -13,6 +13,7 @@ const handleClerkWebhook = httpAction(async (ctx, request) => {
     }
     switch (event.type) {
         case "user.created": // intentional fallthrough
+
             await ctx.runMutation(internal.users.createUser, {
                 name: event.data.first_name || event.data.email_addresses[0].email_address, // 이름이 없을 경우 이메일 주소로 대체합니다.
                 email: event.data.email_addresses[0].email_address,

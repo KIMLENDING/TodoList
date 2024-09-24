@@ -7,6 +7,8 @@ export interface Routine {
     title: string; //
     description: string; // 설명
     completed: boolean;
+    createdAt: number; // 루틴 생성 날짜
+    completedDate: number[]; // 루틴 완료 날짜
 }
 export interface Routines {
     [x: string]: any; // 서버에서 만드는 필드
@@ -16,6 +18,7 @@ export interface Routines {
     description: string; // 설명
     type: string[]; // 아침, 점심, 저녁 중복 가능 - 기본값 아침
     routineItmes: Routine[]; // 할일
+    updateAt: number; // 루틴 업데이트 날짜
 }
 
 interface RoutineStore {
@@ -39,6 +42,15 @@ const useRoutineStore = create<RoutineStore>((set) => ({
         for (let i = 0; i < newMockData.length; i++) {
             const routine = newMockData[i].routineItmes?.find((r: Routine) => r.dndId === routineId);
             if (routine) {
+                if (routine.completed === false) { // 완료 시 오늘(완료한) 날짜 추가
+                    const now = new Date();
+                    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+                    routine.completedDate.push(startOfDay);
+                } else { // 완료 취소 시 오늘(취소한) 날짜 삭제
+                    const now = new Date();
+                    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+                    routine.completedDate = routine.completedDate.filter((date: any) => date !== startOfDay);
+                }
                 routine.completed = !routine.completed;
                 return { mockData: newMockData };
             }
@@ -82,9 +94,7 @@ const useRoutineStore = create<RoutineStore>((set) => ({
     }),
 
     handleDelet2: (mockId) => set((state) => {
-        console.log(mockId);
         const newMockData = state.mockData.filter((r: Routines) => r.dndId !== mockId);
-        console.log(newMockData);
         return { mockData: newMockData };
     }),
 
@@ -98,7 +108,9 @@ const useRoutineStore = create<RoutineStore>((set) => ({
                 indexDB: routineToAddTo.routineItmes.length,
                 title,
                 description,
-                completed: false
+                completed: false,
+                createdAt: Date.now(),
+                completedDate: [],
             });
             return { mockData: newMockData };
         }
@@ -114,6 +126,7 @@ const useRoutineStore = create<RoutineStore>((set) => ({
             description,
             type: ['아침'],
             routineItmes: [],
+            updateAt: Date.now(),
         });
         return { mockData: newMockData };
     }),

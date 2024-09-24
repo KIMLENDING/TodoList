@@ -47,8 +47,11 @@ export default defineSchema({
             indexDB: v.number(),
             title: v.string(),
             description: v.string(),
-            completed: v.boolean(),
+            completed: v.boolean(), // 완료 여부 매일 초기화 됨
+            createdAt: v.number(), // 루틴 생성 날짜
+            completedDate: v.array(v.number()), // 루틴 완료 날짜 
         }))),
+        updateAt: v.number(), // 루틴 업데이트 날짜 // 초기 값은 생성 날짜
     }),
 
 

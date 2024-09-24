@@ -28,8 +28,6 @@ export const getUserById = query({
     },
 });
 
-
-
 /**
  * 사용자 생성 {name, email, imageUrl, clerkId}
  */
