@@ -99,9 +99,12 @@ export const resetRoutines = mutation({
         const [year, month, day] = formatter.format(now).split('. ').map(Number);
 
         // 오늘 날짜의 00:00으로 설정된 한국 시간대 Date 객체 생성
-        const kstMidnightToday = new Date(Date.UTC(year, month - 1, day - 1, 15, 0, 0)); // UTC로 변환을 위해 9시간을 빼줌
+        const kstMidnightToday = new Date(year, month - 1, day - 1, 15, 0, 0); // UTC로 변환을 위해 9시간을 빼줌
         const updateDate = kstMidnightToday.getTime();
-        //        console.log(updateDate);
+        console.log(kstMidnightToday);
+        console.log(updateDate);
+        const updateDate2 = new Date(updateDate);
+        console.log('a', updateDate2);
         const identity = await ctx.auth.getUserIdentity(); // 사용자 정보 가져오기
         if (!identity) {
             throw new ConvexError("User not found");
@@ -121,24 +124,41 @@ export const resetRoutines = mutation({
         if (routines.length === 0) {
             return console.log('루틴 정보가 없습니다.');
         }
-        for (const routine of routines) {
-            // 루틴의 완료 여부를 초기화
-            if (routine.updateAt < updateDate) { // 하루에 한번 업데이트
+        // for (const routine of routines) {
+        //     // 루틴의 완료 여부를 초기화
+        //     if (routine.updateAt < updateDate) { // 하루에 한번 업데이트
+        //         console.log('루틴의 완료 여부를 초기화');
+        //         if (routine.routineItmes?.length) {
+        //             for (const r of routine.routineItmes) {
+        //                 r.completed = false;
+        //             }
+        //         }
+        //         // 루틴의 완료 여부를 초기화한 루틴을 업데이트
+        //         await ctx.db.patch(routine._id, {
+        //             ...routine,
+        //             updateAt: updateDate, // 루틴 업데이트 날짜를 오늘 날짜로 업데이트 
+        //             routineItmes: routine.routineItmes,
+        //         });
+        //     }
+        // }
+        const updatePromises = routines.map(async (routine) => {
+            if (routine.updateAt < updateDate) {
+                console.log('루틴의 완료 여부를 초기화');
+                console.log('db', new Date(routine.updateAt));
+                console.log('서버', new Date(updateDate));
                 if (routine.routineItmes) {
                     for (const r of routine.routineItmes) {
                         r.completed = false;
                     }
                 }
-                // 루틴의 완료 여부를 초기화한 루틴을 업데이트
-                await ctx.db.patch(routine._id, {
+                return ctx.db.patch(routine._id, {
                     ...routine,
-                    updateAt: updateDate, // 루틴 업데이트 날짜를 오늘 날짜로 업데이트 
+                    updateAt: updateDate,
                     routineItmes: routine.routineItmes,
                 });
-
             }
-        }
-
+        });
+        await Promise.all(updatePromises);
 
     },
 });
