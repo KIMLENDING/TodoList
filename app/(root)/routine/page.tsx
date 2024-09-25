@@ -22,12 +22,10 @@ const RoutinePage = () => {
                 } catch (error) {
                     console.error("Error updating routines:", error);
                 }
-            } else {
-                await setRoutines({ mockData: [] });
             }
         };
         updateRoutines();
-    }, [mockData, setRoutines]);
+    }, [mockData]);
     if (!Routines) {
         return (
             <div className='h-screen flex items-center justify-center'>

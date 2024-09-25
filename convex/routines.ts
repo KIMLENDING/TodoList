@@ -44,6 +44,9 @@ export const setRoutines = mutation({
         }))),
     },
     handler: async (ctx, args) => {
+        if (!args.mockData) { // 받아온 데이터가 없을 경우
+            return;
+        }
         const identity = await ctx.auth.getUserIdentity(); // 사용자 정보 가져오기
         if (!identity) {
             throw new ConvexError("User not found");
@@ -55,7 +58,6 @@ export const setRoutines = mutation({
         if (user.length === 0) {
             throw new ConvexError('사용자 정보가 없습니다.');
         }
-
         const routines = await ctx.db
             .query("routines")
             .filter((q) => q.eq(q.field("authorId"), user[0].clerkId))
@@ -63,9 +65,7 @@ export const setRoutines = mutation({
         routines.map(async (routine) => { // 루틴 삭제
             await ctx.db.delete(routine._id);
         });
-        if (!args.mockData) {
-            return;
-        }
+
         for (const routine of args.mockData) {
             await ctx.db.insert("routines", {
                 user: user[0]._id,
@@ -91,7 +91,7 @@ export const resetRoutines = mutation({
             return;
         }
         const now = new Date(); // 당일 날짜 가져오기 yyyy/mm/dd-00:00:00
-        const updateDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 15, 0, 0, 0).getTime(); // 서버 시간 계산 해야 할 듯
+        const updateDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0).getTime(); // 서버 시간 계산 해야 할 듯
         console.log(updateDate);
         const identity = await ctx.auth.getUserIdentity(); // 사용자 정보 가져오기
         if (!identity) {
