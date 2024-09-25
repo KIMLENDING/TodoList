@@ -90,6 +90,7 @@ export const resetRoutines = mutation({
             console.log('루틴 페이지 입니다.');
             return;
         }
+        console.log(args.routeId);
         const now = new Date(); // 당일 날짜 가져오기 yyyy/mm/dd-00:00:00
         // const updateDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0).getTime(); // 서버 시간 계산 해야 할 듯
         // console.log(updateDate);
@@ -100,7 +101,7 @@ export const resetRoutines = mutation({
         // 오늘 날짜의 00:00으로 설정된 한국 시간대 Date 객체 생성
         const kstMidnightToday = new Date(Date.UTC(year, month - 1, day - 1, 15, 0, 0)); // UTC로 변환을 위해 9시간을 빼줌
         const updateDate = kstMidnightToday.getTime();
-        console.log(updateDate);
+        //        console.log(updateDate);
         const identity = await ctx.auth.getUserIdentity(); // 사용자 정보 가져오기
         if (!identity) {
             throw new ConvexError("User not found");

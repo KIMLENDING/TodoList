@@ -41,6 +41,7 @@ const RoutineComponent = ({ routineData = [] }: RoutineComponentProps) => {
     })
     const { mockData, setMockData } = useRoutineStore();
     useEffect(() => {
+        console.log('부모 컴포넌트에서 받아온 값 store 업데이트', routineData);
         setMockData(routineData);
     }, []);
     const [windowSize, setWindowSize] = useState({
