@@ -142,6 +142,7 @@ const RoutineComponent = ({ routineData = [] }: RoutineComponentProps) => {
             // row-0, row-1, row-2, row-3, row-4, row-5, row-6, row-7, row-8, row-9 ...
             const sourceChunkIndex = parseInt(source.droppableId.split('-')[1]); // 이전 행 인덱스
             const destChunkIndex = parseInt(destination.droppableId.split('-')[1]); // 이후 행 인덱스
+            console.log('sourceChunkIndex', source.droppableId);
 
             const newMockData = Array.from(mockData); // 복사본 생성
             const chunkedMockData = chunkArray(newMockData, windowSize.width, maxItemsPerRow); // 최대 너비에 따라 배열을 나눔 [[],[],[],...] 형태
@@ -205,7 +206,7 @@ const RoutineComponent = ({ routineData = [] }: RoutineComponentProps) => {
                                 <div
                                     ref={provided.innerRef}
                                     {...provided.droppableProps}
-                                    className={cn("flex flex-wrap gap-4 w-full justify-start ", maxItemsPerRow === 1 ? 'py-4' : 'h-[480px] py-1')}
+                                    className={cn("flex flex-wrap gap-4 w-full justify-start", maxItemsPerRow === 1 ? 'py-4' : 'h-[480px] py-1')}
                                 >
                                     {chunk.map((Data: Routines, index2: number) => (
                                         <Draggable key={Data.dndId} draggableId={Data.dndId} index={index2} >
@@ -268,7 +269,6 @@ const RoutineComponent = ({ routineData = [] }: RoutineComponentProps) => {
                                                                                             setDescription={setDescription}
                                                                                             selectedRoutineId={selectedRoutineId}
                                                                                             setSelectedRoutineId={setSelectedRoutineId}
-
                                                                                             routineItmes={routine}
                                                                                         />
                                                                                     </div>

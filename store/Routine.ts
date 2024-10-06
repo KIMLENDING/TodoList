@@ -1,6 +1,6 @@
 
 import { create } from 'zustand';
-
+import { v4 as uuidv4 } from 'uuid';
 export interface Routine {
     dndId: string; // 클라이언트에서 dnd를 위한 아이디
     indexDB: number; // 순서 DB에서 사용할 인덴스로 데이터를 가져올 때 순서를 정렬해서 가져오기 위함
@@ -103,8 +103,9 @@ const useRoutineStore = create<RoutineStore>((set) => ({
         const routineToAddTo = newMockData.find((r: Routines) => r.dndId === DataId);
         if (routineToAddTo) {
             routineToAddTo.routineItmes = routineToAddTo.routineItmes || [];
+            const uuid = uuidv4();
             routineToAddTo.routineItmes.push({
-                dndId: `routine-${DataId}-${routineToAddTo.routineItmes.length}`,
+                dndId: `routine-${DataId}-${uuid}`,
                 indexDB: routineToAddTo.routineItmes.length,
                 title,
                 description,
@@ -119,8 +120,9 @@ const useRoutineStore = create<RoutineStore>((set) => ({
 
     handleAddRoutine2: (title, description) => set((state) => {
         const newMockData = [...state.mockData];
+        const uuid = uuidv4();
         newMockData.push({
-            dndId: `mock-${newMockData.length}`, // 클라이언트에서 dnd를 위한 아이디
+            dndId: `mock-${uuid}`, // 클라이언트에서 dnd를 위한 아이디
             indexDB: newMockData.length,
             title,
             description,

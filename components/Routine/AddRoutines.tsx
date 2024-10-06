@@ -55,7 +55,7 @@ const AddRoutines = (
                     )} onClick={() => { setAddRoutine(true); setEdit2(true) }}
                     >
                         <Plus className='text-yellow-300' />
-                        <p>create new routin</p>
+                        <p>루틴 생성</p>
                     </div>
                 </div>
             </>)}
