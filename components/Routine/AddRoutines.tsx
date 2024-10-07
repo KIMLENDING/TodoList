@@ -49,9 +49,9 @@ const AddRoutines = (
                     </div>
                 </div>
             </>) : (<> {/*부모 추가 모드(데이터 입력 모드) 아닐때 상시 보이는 추가 버튼 */}
-                <div className='flex w-fit bg-[#1F1F1F] h-fit items-center justify-center rounded-xl pb-2'>
+                <div className='flex w-fit bg-[#1F1F1F] h-fit items-center justify-center rounded-xl '>
                     <div className={cn(
-                        'flex flex-row gap-3 rounded-lg p-4 transition-all group hover:ring-1 hover:ring-gray-300 shadow shadow-[#272727]',
+                        'flex flex-row gap-3 rounded-lg p-4 transition-all group hover:ring-1 hover:ring-yellow-300 ',
                     )} onClick={() => { setAddRoutine(true); setEdit2(true) }}
                     >
                         <Plus className='text-yellow-300' />

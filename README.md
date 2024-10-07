@@ -17,6 +17,7 @@
 
 - **대제목/소제목 구조**: 대제목(시간대)으로 루틴을 나누고, 그 안에서 소제목(해야 할 행동)을 정의할 수 있습니다.
 - **드래그 앤 드롭(DnD)**: 대제목 안에서 소제목을 이동하거나, 대제목끼리 순서를 변경할 수 있습니다.
+- **00시에 루틴 상태 초기화**: UTC +9를 기준으로 상태를 초기화 시켜준다.
 
 ### 3. Todo 목록 페이지
 
@@ -41,7 +42,7 @@
 - **백엔드**: Convex
 - **애니메이션**: TailwindCSS 및 Radix UI
 - **배포**: Vercel
-- **기타**: React Beautiful DnD, React Hook Form, Day.js, Date-fns, Zod, Lucide Icons
+- **기타**: React Beautiful DnD, React Hook Form, Day.js, Date-fns, Zod, Lucide Icons, zustand
 
 ## env.local
 
@@ -61,3 +62,10 @@ CLERK_SECRET_KEY=
 NEXT_PUBLIC_CLERK_SIGN_IN_URL='/sign-in'
 NEXT_PUBLIC_CLERK_SIGN_UP_URL='/sign-up'
 ```
+
+## 후기
+
+이 프로젝트를 통해 React Beautiful DnD의 작동방식과 사용 방법을 알게 되었다.
+루틴 페이지에서 루틴데이터를 갱신 할 때 초기에 covex에서 데이터를 받아와서 그걸 store 변수에 담고 이 변수를 가공하는 방식으로 이 변수의 값이 바뀌면 convex 다시 데이터를 업로드하는 방식으로
+구현 했는데, 이걸 좀 더 효율적으로 하기 위해서는 어떻게 해야 할지 고민이다. 첫 번째 방법은 import { debounce } from 'lodash';를 사용해서 이벤트가 호출된 후 일정 시간 뒤에 업데이트 할 지
+아니면 지금 처럼 할 지 이게 변수의 상태가 바뀌면 convex에 업데이트 하는 것인데 생각 보다 변수가 수시로 바뀌나? 라는 생각이 들어서 해야하나 말아야 하나 고민이다.
