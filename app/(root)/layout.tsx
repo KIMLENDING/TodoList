@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
     return (
         <div className="relative flex flex-col">
-            <main className="relatice flex bg-[#1F1F1F]">
+            <main className="relatice flex bg-[#252525]">
                 <LeftSidebar />
                 <section className="flex min-h-screen flex-1 flex-col px-4 sm:px-14 ">
                     <div className=" flex w-full flex-col max-sm:px-4"> {/**mx-auto max-w-5xl 추가 하면 하위 컴포넌트가 중앙으로 정해지긴 하는 데 화면이 크면 여백이 많이 생김 */}

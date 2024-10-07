@@ -82,7 +82,7 @@ const TodoCard = ({ todo, index }: any) => {
     return (
         <section ref={ref} className='w-full '>
             <section className={cn(
-                'reveal xScrollbars mx-auto  flex w-full  flex-col gap-4 overflow-y-scroll rounded-3xl   shadow-xl p-2',
+                'reveal xScrollbars mx-auto  flex w-full  flex-col gap-4 overflow-y-scroll  p-1',
                 {
                     'animate-rotate': index! % 2 !== 0 && inView, // 해당 달이 홀수 달일 때 rotate 애니메이션 실행 6도에서 0도로 각도가 돌아옴
                     'animate-rotateAlt': index! % 2 === 0 && inView, // 해당 달이 짝수 달일 때 rotateAlt 애니메이션 실행 -6도에서 0도로 각도가 돌아옴

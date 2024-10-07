@@ -160,7 +160,8 @@ const RoutineComponent = ({ routineData = [] }: RoutineComponentProps) => {
             //  자식 Droppable의 아이디는 routine-[Routins_id_] 형태
             const sourceKey = source.droppableId; // 이전 자식 Droppable의 routine-[Routins_id_]
             const destinationKey = destination.droppableId; // 이후 자식 Droppable의 routine-[Routins_id_]
-
+            console.log('sourceKey', sourceKey);
+            console.log('destinationKey', destinationKey);
             const _items = JSON.parse(JSON.stringify(mockData)) as typeof mockData;
             const sourceColumn = _items.find((item) => item.dndId === sourceKey.replace('routine-', '')); // 이전 부모 요소(Routins)의 _id_로 routine이 존재하는 Routins 객체 찾기
             const destinationColumn = _items.find((item) => item.dndId === destinationKey.replace('routine-', '')); // 이후 부모 요소(Routins)의 _id_로 routine이 이동 할 Routins 객체 찾기

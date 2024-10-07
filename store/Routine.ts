@@ -100,7 +100,7 @@ const useRoutineStore = create<RoutineStore>((set) => ({
 
     handleAddRoutine: (DataId, title, description) => set((state) => {
         const newMockData = JSON.parse(JSON.stringify(state.mockData));
-        const routineToAddTo = newMockData.find((r: Routines) => r.dndId === DataId);
+        const routineToAddTo = newMockData.find((r: Routines) => r.dndId === DataId); // 부모 루틴 찾기
         if (routineToAddTo) {
             routineToAddTo.routineItmes = routineToAddTo.routineItmes || [];
             const uuid = uuidv4();

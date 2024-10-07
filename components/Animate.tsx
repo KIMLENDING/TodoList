@@ -17,7 +17,7 @@ const Animate = ({
     return (
         <section ref={ref} className='w-full '>
             <section className={cn(
-                'reveal xScrollbars mx-auto border-2 border-yellow-400  flex w-full  flex-col gap-4 overflow-y-scroll rounded-3xl shadow-xl p-2',
+                'reveal xScrollbars mx-auto  flex w-full  flex-col gap-4 overflow-y-scroll rounded-3xl ',
                 {
                     'animate-rotate': inView && index % 2 !== 0, // 해당 달이 홀수 달일 때 rotate 애니메이션 실행 6도에서 0도로 각도가 돌아옴
                     'animate-rotateAlt': inView && index % 2 === 0, // 해당 달이 짝수 달일 때 rotateAlt 애니메이션 실행 -6도에서 0도로 각도가 돌아옴
