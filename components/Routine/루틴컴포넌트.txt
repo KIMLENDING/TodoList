@@ -1,0 +1,36 @@
+루틴 컴포넌트는 dnd를 2중첩으로 한 컴포넌트다
+초기에 서버에서 1차원 배열로 데이터를 받아오면 이걸 화면의 크기에 맞도록 row값을 정해서 2차원 형태의 배열로 바꾼다
+Routines의 형식은 객체로 
+export interface Routine {
+    dndId: string; // 클라이언트에서 dnd를 위한 아이디 ( 이건 한번 할당하면 고정)
+    indexDB: number; // 순서 DB에서 사용할 인덴스로 데이터를 가져올 때 순서를 정렬해서 가져오기 위함 ( 이건 루틴의 순서를 변경하면 바로 바로 바뀜)
+    title: string; //
+    description: string; // 설명
+    completed: boolean;
+    createdAt: number; // 루틴 생성 날짜
+    completedDate: number[]; // 루틴 완료 날짜
+}
+export interface Routines {
+    [x: string]: any; // 서버에서 만드는 필드
+    dndId: string; // 클라이언트에서 dnd를 위한 아이디 ( 이건 한번 할당하면 고정)
+    indexDB: number; // 순서 DB에서 사용할 인덴스로 데이터를 가져올 때 순서를 정렬해서 가져오기 위함 ( 이건 루틴의 순서를 변경하면 바로 바로 바뀜)
+    title: string; //  제목
+    description: string; // 설명
+    type: string[]; // 아침, 점심, 저녁 중복 가능 - 기본값 아침 (이건 나중에 따로 건드리는 기능 추가할 지 말지 고민중)
+    routineItmes: Routine[]; // 할일
+    updateAt: number; // 루틴 업데이트 날짜
+}이런 식이다
+
+ex) ['Routines1','Routines2','Routines3','Routines4','Routines5','Routines6','RoutRoutines7'] => row가 3이면 chunkedMockData=[['Routines1','Routines2','Routines3'],['Routines4','Routines5','Routines6'],['Routines7']] 이런 식으로 바꾸고
+chunkedMockData.length만큼 type이 GROUP 인 <Draggable id=`row-${chunkIndex} type={GROUP}`/> 을 만든다. 이후
+드롭을 할 수 있는 공간을 만들었으니 이제 드래그 가능한 컴포넌트를 만든다.
+hunkedMockData.map((chunk: Routines[])=>{}) ex) chunk =['Routines1','Routines2','Routines3'] 
+chunke.map((itme)=>{}) 각 아이템들을 드래그 가능한 컴포넌트로 만든다. <Draggable draggableId={itme.dndId}/> 여기서 dndId는 각 드래그가능한 컴포넌트의 고유 값
+이렇게 하면 부모 요소끼리 가로와 세로로 이동이 가능해 진다.
+
+이게 부모 요소 안에 새로운 드롭 필드(컴포넌트를)를  추가 하고 그 안에 드래그 가능한 요소를 집어 넣으면 된다. 위 처음 알려준 과정을 한번더 반복하는 것임
+
+가장 중요한것은 Draggabel 컴포넌트에 type을 설정하지 않으면 자식 요소와 부모요소가 드롭 필드를 공유하게 됨으로 오류가 발생하니 꼭 타입을 설정해야한다.
+
+부모 dndId는 `mock-${uuid}`이런 형식인데 이게 필요한 이유는 클라이언트에서 dnd를 할 때 각각의 요소끼리 구분 할 수 있도록 하기 위해 필요하다.
+
