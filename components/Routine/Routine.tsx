@@ -199,7 +199,7 @@ const RoutineComponent = ({ routineData = [] }: RoutineComponentProps) => {
                         setDescription={setDescription}
                     />
                 </div>
-                <div className='mx-auto text-white-1'>
+                <div className=' text-white-1'>
                     {chunkedMockData.map((chunk: Routines[], chunkIndex: number) => (
                         <Droppable droppableId={`row-${chunkIndex}`} direction='horizontal' key={chunkIndex} type="GROUP">
                             {(provided) => (
@@ -215,7 +215,7 @@ const RoutineComponent = ({ routineData = [] }: RoutineComponentProps) => {
                                                     ref={provided.innerRef}
                                                     {...provided.draggableProps}
                                                     {...provided.dragHandleProps}
-                                                    className="w-[380px]"
+                                                    className="flex-1"
                                                 >
                                                     <Droppable droppableId={`routine-${Data.dndId}`} type="ITEM">
                                                         {(provided, snapshot) => (
@@ -225,7 +225,7 @@ const RoutineComponent = ({ routineData = [] }: RoutineComponentProps) => {
                                                                 onMouseEnter={() => { setHoverIdP(Data.dndId) }} // 호버시 아이디 설정
                                                                 onMouseLeave={() => { setHoverIdP('') }} // 호버시 아이디 해제
                                                                 className={cn(
-                                                                    ' max-w-[380px]  flex flex-col gap-3 rounded-xl p-4 active:ring-1 active:ring-yellow-200 bg-[#1F1F1F] group  hover:ring-1 hover:ring-yellow-200',
+                                                                    '   flex flex-col gap-3 rounded-xl p-4 active:ring-1 active:ring-yellow-200 bg-[#1F1F1F] group  hover:ring-1 hover:ring-yellow-200',
                                                                     snapshot.isDraggingOver ? 'shadow-lg shadow-gray-400' : '',
 
                                                                     'h-fit',

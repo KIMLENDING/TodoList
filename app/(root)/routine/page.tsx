@@ -16,13 +16,14 @@ const RoutinePage = () => {
     useEffect(() => {
         isMounted.current = true;
         const updateRoutines = async () => {
+            console.log('Routines', Routines);
+            console.log('mockData', mockData);
             console.log('서버에서 가져온 루틴 데이터 업로드 하는 useEffect');
             // Check if mockData has valid data before updating
             if (JSON.stringify(mockData) === JSON.stringify(Routines)) {
                 console.log('루틴 데이터가 서버에서 가져온 데이터와 같을 경우');
                 return;
             } // 루틴 데이터가 서버에서 가져온 데이터와 같을 경우
-
             if (mockData && mockData.length > 0) {
                 try { // 덮어쓰기를 하기위해 서버에서 추가된 필드 부분은 삭제
                     console.log('루틴 데이터 업로드');
@@ -40,7 +41,7 @@ const RoutinePage = () => {
         return () => {
             isMounted.current = false;
         };
-    }, [mockData, Routines]);
+    }, [mockData,]);
     if (!Routines) {
         return (
             <div className='h-screen flex items-center justify-center'>
