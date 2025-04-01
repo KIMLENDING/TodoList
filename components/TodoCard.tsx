@@ -1,11 +1,5 @@
 import React from 'react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card';
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from "@/components/ui/tooltip"
 
 import Link from 'next/link'
 import TextScrolling from './TextScrolling'
@@ -13,7 +7,7 @@ import { Badge } from './ui/badge'
 import TodoControls from './TodoCompletion'
 import { Progress } from './ui/progress'
 import { format } from 'date-fns'
-import { Todo } from '@/types/types'
+
 import { cn } from '@/lib/utils';
 import { useInView } from 'react-intersection-observer';
 
@@ -93,7 +87,7 @@ const TodoCard = ({ todo, index }: any) => {
                     <CardHeader>
                         <div className='flex flex-col'>
                             <div className='flex flex-row gap-4 justify-between items-center'>
-                                <Link href={`/todos/${todo._id}`} className="flex-1 min-w-0"> {/* min-w-0: 최소 너비 0 기본은 auto라서 자식요소의 공간을 최대한 확보하려 하기 때문에 자식요소가 커지는 것을 방지*/}
+                                <Link href={`/dashboard/todos/${todo._id}`} className="flex-1 min-w-0"> {/* min-w-0: 최소 너비 0 기본은 auto라서 자식요소의 공간을 최대한 확보하려 하기 때문에 자식요소가 커지는 것을 방지*/}
                                     <CardTitle className="flex-1 overflow-hidden">
                                         <TextScrolling text={todo.todoTitle} />
                                     </CardTitle>

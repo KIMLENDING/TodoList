@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { SignedOut, useUser } from '@clerk/nextjs';
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
@@ -29,11 +29,28 @@ const ProgressBar = ({ label, value = 0, max = 0, color }: ProgressBarProps) => 
 
 const ProgressBarCard = () => {
     const { user } = useUser();
-    const getTodoCount = useQuery(api.todos.getTodoCount, { userId: user?.id } || {});
+    const getTodoCount = useQuery(api.todos.getTodoCount, { userId: user?.id });
 
     const { completed = 0, inProgress = 0, failed = 0 } = getTodoCount || {};
     const total = completed + inProgress + failed;
-
+    if (!user) {
+        return (
+            <div className='h-min '>
+                <Card className='hover:ring-0'>
+                    <CardHeader>
+                        <CardTitle className='text-white-1'>상황판</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <SignedOut>
+                            <Link href='/sign-in'>
+                                <Button variant='outline' className='w-full'>로그인 후 사용하세요</Button>
+                            </Link>
+                        </SignedOut>
+                    </CardContent>
+                </Card>
+            </div>
+        )
+    }
     return (
         <div className='h-min '>
             <Card className='hover:ring-0'>
@@ -41,30 +58,13 @@ const ProgressBarCard = () => {
                     <CardTitle className='text-white-1'>상황판</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    {!user ? (<><SignedOut>
-                        <div className='flex-center w-full pb-14 max-lg:px-4 lg:pr-8 flex-col'>
-                            <Button asChild className='text-[16px] w-full bg-blue-400 font-extrabold text-white-1'>
-                                <Link href='/sign-in'>로그인</Link>
-                            </Button>
-                            <div>
-                                테스트 계정
-                                <div>
-                                    아이디: kilin0402@gmail.com
-                                </div>
-                                <div>
-                                    비밀번호: todo0402!
-                                </div>
-                            </div>
-                        </div>
-                    </SignedOut></>) : (<>
-                        {getTodoCount ? (
-                            <> <ProgressBar label="완료" value={completed} max={total} color="bg-green-600" />
-                                <ProgressBar label="진행중" value={inProgress} max={total} color="bg-blue-600" />
-                                <ProgressBar label="실패" value={failed} max={total} color="bg-red-600" /></>
-                        ) : (<LoaderSpinner />)}</>)}
+
+                    {getTodoCount ? (
+                        <> <ProgressBar label="완료" value={completed} max={total} color="bg-green-600" />
+                            <ProgressBar label="진행중" value={inProgress} max={total} color="bg-blue-600" />
+                            <ProgressBar label="실패" value={failed} max={total} color="bg-red-600" /></>
+                    ) : (<LoaderSpinner />)}
                 </CardContent>
-                <CardFooter>
-                </CardFooter>
             </Card>
         </div>
     )

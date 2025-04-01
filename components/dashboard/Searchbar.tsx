@@ -14,9 +14,9 @@ const Searchbar = () => {
 
     useEffect(() => {
         if (debouncedSearch) {
-            router.push(`/todos?search=${search}`)
-        } else if (!debouncedSearch && pathname === '/todos') {
-            router.push('/todos')
+            router.push(`/dashboard/todos?search=${search}`)
+        } else if (!debouncedSearch && pathname === '/dashboard/todos') {
+            router.push('/dashboard/todos')
         }
     }, [router, debouncedSearch, pathname])
 

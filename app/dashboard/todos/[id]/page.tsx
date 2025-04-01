@@ -125,7 +125,7 @@ const TodoDetail = ({ params }: PageProps) => {
                         completedAt: todo.completedAt,
                     });
                     toast({ title: 'todo 업데이트 성공' });
-                    router.push('/todos');
+                    router.push('/dashboard/todos');
                 } catch (error) {
                     console.error(error);
                     toast({ title: 'todo 업데이트 실패', variant: 'destructive' });

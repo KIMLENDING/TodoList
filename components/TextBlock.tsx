@@ -10,7 +10,7 @@ type TextBlockProps = {
 
 const TextBlock = ({ todoTitle, isCompleted, _id }: TextBlockProps) => (
   <li className="mx-2 flex flex-col rounded-[18px] bg-white-1 p-6 pb-7 font-medium">
-    <Link href={`/todos/${_id}`}>
+    <Link href={`/dashboard/todos/${_id}`}>
       <h2 className="mb-2 text-xl font-extrabold text-zinc-800">{todoTitle}</h2>
     </Link>
     <div>

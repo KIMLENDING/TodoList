@@ -7,8 +7,7 @@ import PriorityAndCategoryCard from '@/components/dashboard/PriorityAndCategoryC
 import DateRangeSelect from '@/components/dashboard/DateRangeSelect';
 
 import Animate from '@/components/Animate';
-const Deashboard = () => {
-    console.log(new Date(1727308800000))
+const Dashboard = () => {
     return (
         <section className='w-full mt-10 flex flex-col gap-4 px-1 items-center overflow-y-auto no-scrollbar'>
             <div className='flex w-full flex-col h-full gap-8' style={{ maxHeight: 'calc(100vh - 10rem)' }}>
@@ -23,4 +22,4 @@ const Deashboard = () => {
     )
 }
 
-export default Deashboard
+export default Dashboard

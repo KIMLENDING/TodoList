@@ -59,7 +59,7 @@ const TodoControls = ({ isCompleted, todoId }: TodoControlsProps) => {
     }
     const handleEdit = () => {
         // 수정 처리
-        router.push(`/todos/${todoId}`)
+        router.push(`/dashboard/todos/${todoId}`)
     }
     const handleShare = () => {
         // 공유 처리

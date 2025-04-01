@@ -2,31 +2,31 @@ import { AlarmCheck, CalendarFold, House, ListTodo, PencilLine, Plus } from 'luc
 export const sidebarLinks = [
     {
         imgURL: "/icons/house.svg",
-        route: "/",
+        route: "/dashboard",
         label: "홈",
         component: House
     },
     {
         imgURL: "/icons/alarm-clock.svg",
-        route: "/routine",
+        route: "/dashboard/routine",
         label: "루틴",
         component: AlarmCheck,
     },
     {
         imgURL: "/icons/list-todo.svg",
-        route: "/todos",
+        route: "/dashboard/todos",
         label: "TODO 목록",
         component: ListTodo,
     },
     {
         imgURL: "/icons/pencil-line.svg",
-        route: "/createTodo",
+        route: "/dashboard/createTodo",
         label: "TODO 생성",
         component: PencilLine,
     },
     {
         imgURL: "/icons/calendar-fold.svg",
-        route: "/calendar",
+        route: "/dashboard/calendar",
         label: "캘린더",
         component: CalendarFold,
     },
