@@ -1,5 +1,5 @@
 import React from 'react';
-import { startOfYear, endOfYear, format } from 'date-fns';
+import { startOfYear, endOfYear } from 'date-fns';
 import { useInView } from 'react-intersection-observer'
 import { cn } from '@/lib/utils'
 import { DateRange } from 'react-day-picker';

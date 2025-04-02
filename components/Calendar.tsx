@@ -11,11 +11,10 @@ import Tooltip from '@/components/Tooltip';
 interface CalendarProps {
     monthTodos: any[];
     date: any;
+    sample?: boolean;
 }
 
-const Calendar = ({ monthTodos, date }: CalendarProps) => {
-
-    console.log(date)
+const Calendar = ({ monthTodos, date, sample = false }: CalendarProps) => {
 
     const [calBgColor, setCalBgColor] = useState(0) // 캘린더 배경 색
     const [takeover, setTakeover] = useState(false) // 타일 클릭 시 타일 내용을 보여주는 창
@@ -73,9 +72,9 @@ const Calendar = ({ monthTodos, date }: CalendarProps) => {
 
     // 받아온 할 일 정보를 일별로 분류
     const groupByDate = (todos: any) => {
-        return todos.reduce((acc: { [date: string]: any[] }, todo: any) => {
+        return todos.reduce((acc: { [date: number]: any[] }, todo: any) => {
             const creationDate = new Date(todo._creationTime).toLocaleDateString('ko-KR');
-            const dateonly = creationDate.split('.')[2];
+            const dateonly = +creationDate.split('.')[2].trim();
             if (!acc[dateonly]) {
                 acc[dateonly] = [];
             }
@@ -83,7 +82,7 @@ const Calendar = ({ monthTodos, date }: CalendarProps) => {
             return acc;
         }, {});
     };
-    const groupedByDate: { [date: string]: any[] } = groupByDate(monthTodos || []); // 일별 할 일 정보를 받아서 일별로 할 일을 분류한다.
+    const groupedByDate: { [date: number]: any[] } = groupByDate(monthTodos || []); // 일별 할 일 정보를 받아서 일별로 할 일을 분류한다.
 
 
     // 완료 비율 계산
@@ -105,10 +104,10 @@ const Calendar = ({ monthTodos, date }: CalendarProps) => {
             'bg-emerald-700': rate >= 81 && rate <= 100,
         })
     return (
-        <section ref={ref} className='w-full'>
+        <section ref={ref} >
             <section
                 className={cn(
-                    'reveal xScrollbars mx-auto my-10 flex w-full max-w-sm flex-col gap-4 overflow-y-scroll rounded-3xl bg-zinc-800 p-7 shadow-xl',
+                    ' select-none reveal xScrollbars mx-auto my-4 flex w-full max-w-sm flex-col gap-4 overflow-y-scroll rounded-3xl bg-zinc-800 p-7 shadow-xl ',
                     bgColors(calBgColor),
                     {
                         'animate-rotate': getMonth! % 2 !== 0 && inView, // 해당 달이 홀수 달일 때 rotate 애니메이션 실행 6도에서 0도로 각도가 돌아옴
@@ -135,7 +134,8 @@ const Calendar = ({ monthTodos, date }: CalendarProps) => {
                     ))}
                     {/* 해당 달의 타일에 내용이 있을 때 자세한 내용을 보여주는 창 takeover가 true일 때*/}
                     {tiles.map((_, index) => {
-                        const dayData = Object.entries(groupedByDate).find(([date]) => Number(date) === index + 1)?.[1]; // 해당 날짜의 할 일 정보
+                        const dayData = Object.entries(groupedByDate).find(([date]) => +date === index + 1)?.[1]; // 해당 날짜의 할 일 정보
+
                         const isActive = activeTileIndex === index // 활성화된 타일은 더 큰 크기로 렌더링됨
                         return (
                             <div key={index}
@@ -170,7 +170,7 @@ const Calendar = ({ monthTodos, date }: CalendarProps) => {
                                             {dayData?.map(
                                                 ({ todoTitle, _id, isCompleted }) => (
                                                     <div key={_id}>
-                                                        <TextBlock todoTitle={todoTitle} isCompleted={isCompleted} _id={_id} />
+                                                        <TextBlock todoTitle={todoTitle} isCompleted={isCompleted} _id={_id} sample={sample} />
                                                     </div>
                                                 ),
                                             )}

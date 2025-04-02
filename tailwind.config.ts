@@ -33,6 +33,7 @@ const config = {
           4: "#252525",
           5: "#2E3036",
           6: "#24272C",
+          7: "#000"
         },
 
         border: "hsl(var(--border))",

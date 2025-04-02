@@ -19,11 +19,11 @@ const CalendarPage = () => {
     });
     const { user } = useUser();
     const getTodosByDay = useQuery(api.todos.getTodosByDay, { date: { from: Number(date?.from), to: Number(date?.to) }, userId: user?.id });
-    // console.log(getTodosByDay)
+    console.log('getTodosByDay', getTodosByDay);
     const handleDateChange = (dateRange: DateRange) => {
         setDate(dateRange); // 날짜 범위 업데이트
     };
-    console.log(date?.from)
+
     // 받아온 할 일 정보를 일별로 분류
     const groupByMonth = (todos: any) => {
         // 월을 미리 설정 (01월부터 12월까지)
@@ -57,23 +57,16 @@ const CalendarPage = () => {
     };
 
     const groupedByDate: { [month: string]: any[] } = groupByMonth(getTodosByDay || []); // 일별 할 일 정보를 받아서 일별로 할 일을 분류한다.
-    console.log(groupedByDate)
+
     return (
         <div>
-            <div className=''>
-                <YearMonthSelector onDateChange={handleDateChange} />
-                {/* <Tag year={format(date?.from! || new Date(), 'yyyy')} /> */}
-                <div className="w-full grid grid-cols-1 xl:grid-cols-2  2xl:grid-cols-3  auto-rows-max gap-4">
-                    {Object.keys(groupedByDate).map((year_month) => (
-                        <div key={year_month}>
-                            {groupedByDate[year_month].length > 0 ? (
-                                <Calendar monthTodos={groupedByDate[year_month]} date={year_month} />
-                            ) : (
-                                <Calendar monthTodos={groupedByDate[year_month]} date={year_month} />
-                            )}
-                        </div>
-                    ))}
-                </div>
+            <YearMonthSelector onDateChange={handleDateChange} />
+            <div className="w-full grid grid-cols-1 xl:grid-cols-2  2xl:grid-cols-3  auto-rows-max gap-4">
+                {Object.keys(groupedByDate).map((year_month) => (
+                    <div key={year_month}>
+                        <Calendar monthTodos={groupedByDate[year_month]} date={year_month} />
+                    </div>
+                ))}
             </div>
         </div>
     )
