@@ -201,12 +201,12 @@ const RoutineComponent = ({ routineData = [] }: RoutineComponentProps) => {
                 </div>
                 <div className=' text-white-1'>
                     {chunkedMockData.map((chunk: Routines[], chunkIndex: number) => (
-                        <Droppable droppableId={`row-${chunkIndex}`} direction='horizontal' key={chunkIndex} type="GROUP">
+                        <Droppable droppableId={`row-${chunkIndex}`} direction={maxItemsPerRow === 1 ? 'vertical' : 'horizontal'} key={chunkIndex} type="GROUP">
                             {(provided) => (
                                 <div
                                     ref={provided.innerRef}
                                     {...provided.droppableProps}
-                                    className={cn("flex flex-wrap gap-4 w-full justify-start", maxItemsPerRow === 1 ? 'py-4' : 'h-[480px] py-1')}
+                                    className={cn("flex   gap-4 w-full justify-start", maxItemsPerRow === 1 ? 'py-4  flex-col' : 'h-[480px] py-1')}
                                 >
                                     {chunk.map((Data: Routines, index2: number) => (
                                         <Draggable key={Data.dndId} draggableId={Data.dndId} index={index2} >
